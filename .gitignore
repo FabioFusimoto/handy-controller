@@ -2,6 +2,7 @@
 
 # Extensions
 *.cfg
+*.pyc
 
 # Folder
 Lib/
