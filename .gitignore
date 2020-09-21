@@ -1,0 +1,8 @@
+# created by virtualenv automatically
+
+# Extensions
+*.cfg
+
+# Folder
+Lib/
+Scripts/
