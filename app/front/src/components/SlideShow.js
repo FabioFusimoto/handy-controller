@@ -1,42 +1,45 @@
 import React from 'react';
 
-import { Slide } from 'react-slideshow-image';
-import 'react-slideshow-image/dist/styles.css';
-import './slideshow.css';
+import dog1 from '../img/dog1.jpg'
+import dog2 from '../img/dog2.jpeg'
+import dog3 from '../img/dog3.jpg'
 
-function SlideShow() {
-    const images = [
-        '../img/dog1.jpg',
-        '../img/dog2.jpeg',
-        '../img/dog3.jpg'
-    ]
-    
-    const properties = {
-        transitionDuration: 500,
-        infinite: true,
-        indicators: true,
-        arrows: true
+import './slideshow.css'
+
+class SlideShow extends React.Component {
+    state = {
+        images: [dog1, dog2, dog3],
+        channel: 0
     }
 
-    return (
-        <Slide {...properties}>
-            <div className="each-slide">
-                <div style={{'backgroundImage': `url(${images[0]})`}}>
-                    <span>Slide 1</span>
+    onClickPrevious = () => {
+        if (this.state.channel === 0) {
+            this.setState({channel: this.state.images.length - 1})
+        } else {
+        this.setState({channel: this.state.channel - 1})
+        }
+    }
+
+    onClickNext = () => {
+        if (this.state.channel === this.state.images.length - 1) {
+            this.setState({channel: 0})
+        } else {
+        this.setState({channel: this.state.channel + 1})
+        }
+    }
+
+    render() {
+        return (
+            <div>
+                <h1>Canais</h1>
+                <img className={'channel'} src={this.state.images[this.state.channel]} />
+                <div>
+                    <button onClick={this.onClickPrevious}> Anterior </button>
+                    <button onClick={this.onClickNext}> Próximo </button>
                 </div>
             </div>
-            <div className="each-slide">
-                <div style={{'backgroundImage': `url(${images[1]})`}}>
-                    <span>Slide 2</span>
-                </div>
-            </div>
-            <div className="each-slide">
-                <div style={{'backgroundImage': `url(${images[2]})`}}>
-                    <span>Slide 3</span>
-                </div>
-            </div>
-        </Slide>
-    )
+        )
+    }
 }
 
 export default SlideShow;
