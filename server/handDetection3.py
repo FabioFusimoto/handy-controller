@@ -6,6 +6,7 @@
 import numpy as np
 import cv2.cv2 as cv2
 import math
+import time
 
 #LOADING HAND CASCADE
 hand_cascade = cv2.CascadeClassifier('files/Hand_haar_cascade.xml')
@@ -13,11 +14,35 @@ hand_cascade = cv2.CascadeClassifier('files/Hand_haar_cascade.xml')
 # VIDEO CAPTURE
 cap = cv2.VideoCapture(2)
 
+# PARAMETERS TO OPTIMIZE
+	
+# Threshold defines how many pixels far from the center the hand should be
+# in order for a command to be considered
+threshold = 100
+
+framesWithoutHandsCount = 0
+
+framesWithoutHandsCountThreshold = 10
+
 def getCenterOfMass(cnt):
 	M = cv2.moments(cnt)
-	cX = int(M["m10"] / M["m00"])
-	cY = int(M["m01"] / M["m00"])
-	return (cX, cY)
+	pX = int(M["m10"] / M["m00"])
+	pY = int(M["m01"] / M["m00"])
+	return (pX, pY)
+
+def handleCommands(cX, cY, pX, pY):
+	if pX > (cX + threshold):
+		return 'Diminuir volume'
+	elif pX < (cX - threshold):
+		return 'Aumentar volume'
+	elif pY > (cY + threshold):
+		return 'Diminuir canal'
+	elif pY < (cY - threshold):
+		return 'Aumentar canal'
+	else:
+		'Nenhum'
+
+cX, cY = None, None
 
 while 1:
 	ret, img = cap.read()
@@ -37,10 +62,14 @@ while 1:
 	cv2.drawContours(final, contours, 0, (255,255,0), 3)
 
 	if len(contours) > 0:
+		framesWithoutHandsCount = 0
 		cnt=contours[0]
 		hull = cv2.convexHull(cnt, returnPoints=False)
 
-		(cX, cY) = getCenterOfMass(cnt)
+		(pX, pY) = getCenterOfMass(cnt)
+
+		if cX is None or cY is None:
+			cX, cY = pX, pY
 		
 		# finding convexity defects
 		defects = cv2.convexityDefects(cnt, hull)
@@ -66,15 +95,30 @@ while 1:
 		fingerCountText = str(count_defects + 1) + " FINGERS"		
 		cv2.putText(img, fingerCountText, (200, 50), cv2.FONT_HERSHEY_SIMPLEX, 2, 2)
 		
-		cv2.putText(img, "CX: {}".format(cX), (200, 150), cv2.FONT_HERSHEY_SIMPLEX, 2, 2)
-		cv2.putText(img, "CY: {}".format(cY), (200, 200), cv2.FONT_HERSHEY_SIMPLEX, 2, 2)
+		cv2.putText(img, "PX: {}".format(pX), (200, 150), cv2.FONT_HERSHEY_SIMPLEX, 2, 2)
+		cv2.putText(img, "PY: {}".format(pY), (200, 200), cv2.FONT_HERSHEY_SIMPLEX, 2, 2)
+		cv2.putText(img, "CX: {}".format(cX), (200, 250), cv2.FONT_HERSHEY_SIMPLEX, 2, 2)
+		cv2.putText(img, "CY: {}".format(cY), (200, 300), cv2.FONT_HERSHEY_SIMPLEX, 2, 2)
+
+		command = handleCommands(cX, cY, pX, pY)
+		cv2.putText(img, "Comando: {}".format(command), (200, 350), cv2.FONT_HERSHEY_SIMPLEX, 2, 2)
+
+		cv2.circle(img, (cX, cY), 5, (0, 0, 255))
+	else:
+		framesWithoutHandsCount += 1
+		# print('Frame without hand detected. Count: {}'.format(framesWithoutHandsCount))
+
+	if framesWithoutHandsCount >= framesWithoutHandsCountThreshold:
+		cX, cY = None, None
 
 	cv2.imshow('img',thresh1)
 	cv2.imshow('img1',img)
 	cv2.imshow('img2',img2)
 
-	k = cv2.waitKey(30) & 0xff
-	if k == 27:
+	if cv2.waitKey(5) & 0xFF == ord('q'):
 		break
+
+	time.sleep(1/30)
+
 cap.release()
 cv2.destroyAllWindows()
