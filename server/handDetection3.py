@@ -13,6 +13,12 @@ hand_cascade = cv2.CascadeClassifier('files/Hand_haar_cascade.xml')
 # VIDEO CAPTURE
 cap = cv2.VideoCapture(2)
 
+def getCenterOfMass(cnt):
+	M = cv2.moments(cnt)
+	cX = int(M["m10"] / M["m00"])
+	cY = int(M["m01"] / M["m00"])
+	return (cX, cY)
+
 while 1:
 	ret, img = cap.read()
 	blur = cv2.GaussianBlur(img,(5,5),0) # BLURRING IMAGE TO SMOOTHEN EDGES
@@ -33,6 +39,9 @@ while 1:
 	if len(contours) > 0:
 		cnt=contours[0]
 		hull = cv2.convexHull(cnt, returnPoints=False)
+
+		(cX, cY) = getCenterOfMass(cnt)
+		
 		# finding convexity defects
 		defects = cv2.convexityDefects(cnt, hull)
 		count_defects = 0
@@ -52,16 +61,14 @@ while 1:
 				angle = math.acos((b**2 + c**2 - a**2)/(2*b*c)) * 57.29
 				# ignore angles > 90 and highlight rest with red dots
 				if angle <= 90:
-				    count_defects += 1
+					count_defects += 1
 		# define actions required
-		if count_defects == 1:
-			cv2.putText(img,"2 FINGERS", (200, 50), cv2.FONT_HERSHEY_SIMPLEX, 2, 2)
-		elif count_defects == 2:
-			cv2.putText(img, "3 FINGERS", (200, 50), cv2.FONT_HERSHEY_SIMPLEX, 2, 2)
-		elif count_defects == 3:
-			cv2.putText(img,"4 FINGERS", (200, 50), cv2.FONT_HERSHEY_SIMPLEX, 2, 2)
-		elif count_defects == 4:
-			cv2.putText(img,"5 FINGERS", (200, 50), cv2.FONT_HERSHEY_SIMPLEX, 2, 2)
+		fingerCountText = str(count_defects + 1) + " FINGERS"		
+		cv2.putText(img, fingerCountText, (200, 50), cv2.FONT_HERSHEY_SIMPLEX, 2, 2)
+		
+		cv2.putText(img, "CX: {}".format(cX), (200, 150), cv2.FONT_HERSHEY_SIMPLEX, 2, 2)
+		cv2.putText(img, "CY: {}".format(cY), (200, 200), cv2.FONT_HERSHEY_SIMPLEX, 2, 2)
+
 	cv2.imshow('img',thresh1)
 	cv2.imshow('img1',img)
 	cv2.imshow('img2',img2)
