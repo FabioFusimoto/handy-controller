@@ -32,7 +32,7 @@ class SlideShow extends React.Component {
         return (
             <div>
                 <h1>Canais</h1>
-                <img className={'channel'} src={this.state.images[this.state.channel]} />
+                <img className={'channel'} src={this.state.images[this.state.channel]} alt={'Pictures of some very cute dogs'} />
                 <div>
                     <button onClick={this.onClickPrevious}> Anterior </button>
                     <button onClick={this.onClickNext}> Próximo </button>

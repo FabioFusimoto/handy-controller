@@ -1,12 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { LeapProvider } from 'react-leap';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <LeapProvider options={{enableGestures: true}}>
+      <App />
+    </LeapProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

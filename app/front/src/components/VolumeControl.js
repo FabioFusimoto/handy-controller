@@ -28,7 +28,7 @@ class VolumeControl extends React.Component {
     render() {
         return (
             <div>
-                <img className={'volume-icon'} src={volumeIcon} />
+                <img className={'volume-icon'} src={volumeIcon} alt={'A speaker icon to represent volume'}/>
                 <p>{this.state.volume}</p>
                 <div>
                     <button onClick={this.lowerVolume}> - </button>

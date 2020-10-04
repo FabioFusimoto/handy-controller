@@ -2,7 +2,9 @@
 
 # Extensions
 *.cfg
+*.pyc
 
 # Folder
 Lib/
 Scripts/
+.vscode/
