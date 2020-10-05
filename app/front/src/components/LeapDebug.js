@@ -102,31 +102,39 @@ const LeapDebug = ({frame}) => {
         <div>
             <div className={'log-to-console-button'}>
                 <button onClick={logFrameToConsole}> Frame to console </button>
+            </div>            
+            <div className={'debug-container'}>
+                <div>
+                    Palma da mão - X: {Number(palmPosition[0]).toFixed(1)}
+                </div>
+                <div>
+                    Palma da mão - Y: {Number(palmPosition[1]).toFixed(1)}
+                </div>
+                <div>
+                    Palma da mão - Z: {Number(palmPosition[2]).toFixed(1)}
+                </div>
+            </div>            
+            <div className={'debug-container'}>
+                <div>
+                    Nível de confiança: {Number(confidence).toFixed(2)}
+                </div>
             </div>
-            <div>
-                Palma da mão - X: {Number(palmPosition[0]).toFixed(1)}
-            </div>
-            <div>
-                Palma da mão - Y: {Number(palmPosition[1]).toFixed(1)}
-            </div>
-            <div>
-                Palma da mão - Z: {Number(palmPosition[2]).toFixed(1)}
-            </div>
-            <div>
-                Nível de confiança: {Number(confidence).toFixed(2)}
-            </div>
-            <div>
-                Posição neutra - X: {Number(neutralPosition[0]).toFixed(1)}
-            </div>
-            <div>
-                Posição neutra - Y: {Number(neutralPosition[1]).toFixed(1)}
-            </div>
-            <div>
-                Posição neutra - Z: {Number(neutralPosition[2]).toFixed(1)}
-            </div>
-            <div>
-                Comando: {command}
-            </div>
+            <div className={'debug-container'}>
+                <div>
+                    Posição neutra - X: {Number(neutralPosition[0]).toFixed(1)}
+                </div>
+                <div>
+                    Posição neutra - Y: {Number(neutralPosition[1]).toFixed(1)}
+                </div>
+                <div>
+                    Posição neutra - Z: {Number(neutralPosition[2]).toFixed(1)}
+                </div>
+            </div>            
+            <div className={'debug-container'}>
+                <div>
+                    Comando: {command}
+                </div>
+            </div>            
         </div>
     )
 }

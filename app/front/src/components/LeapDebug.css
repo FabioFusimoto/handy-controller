@@ -1,3 +1,8 @@
 .log-to-console-button {
-    margin: 24px;
+    margin: 12px;
+}
+
+.debug-container {
+    margin-bottom: 12px;
+    margin-left: 12px;
 }
