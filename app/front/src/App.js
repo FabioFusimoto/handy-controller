@@ -8,8 +8,7 @@ import {
 
 import './App.css';
 
-import SlideShow from './components/SlideShow'
-import VolumeControl from './components/VolumeControl'
+import Display from './components/Display'
 import LeapDebug from './components/LeapDebug';
 
 const App = ({frame}) => {
@@ -19,8 +18,7 @@ const App = ({frame}) => {
         <div>
           <Route exact path="/">
             <div className="App">
-              <SlideShow />
-              <VolumeControl />
+              <Display />
             </div>
           </Route>
           <Route path="/leap-debug">
