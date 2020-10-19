@@ -18,7 +18,7 @@ const App = ({frame}) => {
         <div>
           <Route exact path="/">
             <div className="App">
-              <Display />
+              <Display frame={frame}/>
             </div>
           </Route>
           <Route path="/leap-debug">
