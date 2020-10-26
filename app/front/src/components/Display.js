@@ -1,26 +1,34 @@
 import React, {useEffect, useRef, useState} from 'react';
 import SlideShow from './SlideShow';
 import VolumeControl from './VolumeControl';
+import { Player, ControlBar } from 'video-react';
 
 import dog1 from '../img/dog1.jpg'
 import dog2 from '../img/dog2.jpeg'
 import dog3 from '../img/dog3.jpg'
+import { PlayerCSSLink } from './PlayerCSSLink';
+
 
 const Display = ({frame}) => {
     // Channel control
     const [channel, setChannel] = useState(0);
-    const images = [dog1, dog2, dog3]
+    // const images = [dog1, dog2, dog3]
+
+    const videos = [
+        'http://media.w3.org/2010/05/sintel/trailer.mp4',
+        'http://media.w3.org/2010/05/bunny/trailer.mp4'
+    ];
 
     const channelDown = () => {
         if (channel === 0) {
-            setChannel(images.length - 1)
+            setChannel(videos.length - 1)
         } else {
             setChannel(channel - 1)
         }
     }
 
     const channelUp = () => {
-        if (channel === images.length - 1) {
+        if (channel === videos.length - 1) {
             setChannel(0)
         } else {
             setChannel(channel + 1)
@@ -28,21 +36,21 @@ const Display = ({frame}) => {
     }
 
     // Volume control
-    const [volume, setVolume] = useState(50)
+    const [volume, setVolume] = useState(0.5)
 
     const volumeDown = () => {
         if (volume === 0) {
             return
         } else {
-            setVolume(volume - 5)
+            setVolume(volume - 0.05)
         }
     }
 
     const volumeUp = () => {
-        if (volume === 100) {
+        if (volume === 1) {
             return
         } else {
-            setVolume(volume + 5)
+            setVolume(volume + 0.05)
         }
     }
 
@@ -155,7 +163,19 @@ const Display = ({frame}) => {
 
     return(
         <React.Fragment>
-            <SlideShow channel={channel} images={images}/>
+            <PlayerCSSLink />
+            <Player
+                src={videos[channel]}
+                ref={player => {
+                    player = player
+                    if (player) {
+                        player.volume = volume
+                        console.log(volume)
+                    }
+                }}
+            >
+                <ControlBar className="my-class" />
+            </Player>
             <VolumeControl volume={volume}/>
         </React.Fragment>
     )
