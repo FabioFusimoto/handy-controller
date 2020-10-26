@@ -8,6 +8,7 @@ import {
 
 import './App.css';
 
+import ClickSimulation from './components/ClickSimulation';
 import Display from './components/Display';
 import LeapDebug from './components/LeapDebug';
 import Menu from './components/Menu';
@@ -20,6 +21,11 @@ const App = ({frame}) => {
           <Route exact path="/">
             <div className="App">
               <Display frame={frame}/>
+            </div>
+          </Route>
+          <Route exact path="/click-simulation">
+            <div className="ClickSimulation">
+              <ClickSimulation frame={frame}/>
             </div>
           </Route>
           <Route path="/leap-debug">
