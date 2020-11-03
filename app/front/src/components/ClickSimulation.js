@@ -5,18 +5,18 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 
 // Hands position ==> Button mapping
-const horizontalLowerLimit = -150;
-const horizontalUpperLimit = +150;
+const horizontalLowerLimit = -100;
+const horizontalUpperLimit = +100;
 const totalHorizontalMovement = horizontalUpperLimit - horizontalLowerLimit;
-const buttonColums = 4;
+const buttonColums = 3;
 
 const horizontalThresholds = [];
 [...Array(buttonColums - 1).keys()].forEach((i) => {
     horizontalThresholds.push(horizontalLowerLimit + (i + 1) * totalHorizontalMovement/buttonColums); 
 });
 
-const verticalLowerLimit = -75;
-const verticalUpperLimit = +75;
+const verticalLowerLimit = -50;
+const verticalUpperLimit = +50;
 const totalVerticalMovement = verticalUpperLimit - verticalLowerLimit;
 const buttonRows = 2;
 
@@ -32,8 +32,17 @@ const ClickSimulation = ({frame}) => {
     const buttonRefs = useRef([]);
 
     // Hand positioning
+    const [fingersUp, setFingersUp] = useState(null);
     const [palmPosition, setPalmPosition] = useState([null, null, null]);
     const [neutralPosition, setNeutralPosition] = useState([null, null, null]);
+
+    // Click control
+    const [indexSpeed, setIndexSpeed] = useState(null);
+    const [clickingEnabled, setClickingEnabled] = useState(true);
+    const indexSpeedThreshold = 600; // In milimeters per second
+    const indexBackSpeedThreshold = 250;  // In milimeters per second
+    const [lastClickedAt, setLastClickedAt] = useState(null);
+    const minimalTimeBetweenClicks = 200 // In miliseconds
 
     // Hand positioning => Button Id Equivalence
     const [updateSelection, setUpdateSelection] = useState(false);
@@ -46,6 +55,10 @@ const ClickSimulation = ({frame}) => {
     }
     const blurButton = (id) => {
         buttonRefs.current[id].blur();
+    }
+
+    const clickButton = (id) => {
+        buttonRefs.current[id].click();
     }
 
     // Track hand position
@@ -66,12 +79,25 @@ const ClickSimulation = ({frame}) => {
             } else {
                 setUpdateSelection(true);
             }
+
+            // Finger up count
+            setFingersUp(newFingersUp);
+
+            // Index finger speed towards the LEAP Motion
+            const indexFingertipSpeed = -frame.hands[0].indexFinger.tipVelocity[1]; // +y axis is perpendicular to LEAP, pointing out of the surface
+            setIndexSpeed(indexFingertipSpeed);
         } else {
             // Palm position
             setPalmPosition([null, null, null]);
 
             // Neutral position
             setNeutralPosition([null, null, null]);
+
+            // Fingers up
+            setFingersUp(null);
+
+            // Index finger speed
+            setIndexSpeed(null);
         }
     }, [frame]);
 
@@ -124,6 +150,28 @@ const ClickSimulation = ({frame}) => {
         }
     }, [horizontalButtonSelection, verticalButtonSelection]);
 
+    // Click the corresponding button
+    useEffect(() => {
+        if (fingersUp === 1 &&
+            horizontalButtonSelection !== null &&
+            verticalButtonSelection !== null &&
+            indexSpeed !== null) {
+                const now = new Date();
+                const timeSinceLastClick = (lastClickedAt === null) ? 
+                minimalTimeBetweenClicks : (now.getTime() - lastClickedAt.getTime());
+                if (indexSpeed >= indexSpeedThreshold && 
+                    clickingEnabled &&
+                    timeSinceLastClick >= minimalTimeBetweenClicks) {
+                    const buttonId = verticalButtonSelection * buttonColums + horizontalButtonSelection;
+                    clickButton(buttonId);
+                    setClickingEnabled(false);
+                    setLastClickedAt(now);
+                } else if (indexSpeed <= (-indexBackSpeedThreshold) && (timeSinceLastClick >= minimalTimeBetweenClicks)) {
+                    setClickingEnabled(true);
+                }
+            }
+    }, [fingersUp, horizontalButtonSelection, verticalButtonSelection, indexSpeed, clickingEnabled])
+
     // Button Click => log id to console
     const handleButtonClick = (id) => {
         console.log('Button Clicked! Id = ' + id);
@@ -173,7 +221,6 @@ const ClickSimulation = ({frame}) => {
                 Horizontal Button Selection: {horizontalButtonSelection} | Vertical Button Selection: {verticalButtonSelection} | ID: {verticalButtonSelection * buttonColums + horizontalButtonSelection}
             </div>
         </Box>
-        
     )
 }
 
