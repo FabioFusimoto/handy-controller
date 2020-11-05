@@ -8,7 +8,7 @@ export default function VolumeControl({volume}) {
     return (
         <div>
             <img className={'volume-icon'} src={volumeIcon} alt={'A speaker icon to represent volume'}/>
-            <p>{volume}</p>
+            <p>{Number(volume).toFixed(2)}</p>
         </div>
     )
 }
