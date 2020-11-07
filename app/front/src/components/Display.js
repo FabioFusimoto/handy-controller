@@ -1,23 +1,25 @@
 import React, {useEffect, useRef, useState} from 'react';
-import SlideShow from './SlideShow';
-import VolumeControl from './VolumeControl';
-import { Player, ControlBar } from 'video-react';
+import { Player } from 'video-react';
 
-import dog1 from '../img/dog1.jpg'
-import dog2 from '../img/dog2.jpeg'
-import dog3 from '../img/dog3.jpg'
+import ChannelControl from './ChannelControl';
+import VolumeControl from './VolumeControl';
+
 import { PlayerCSSLink } from './PlayerCSSLink';
 
 
 const Display = ({frame}) => {
     // Channel control
     const [channel, setChannel] = useState(0);
-    // const images = [dog1, dog2, dog3]
 
+    // Video player props
     const videos = [
         'http://media.w3.org/2010/05/sintel/trailer.mp4',
-        'http://media.w3.org/2010/05/bunny/trailer.mp4'
+        'http://media.w3.org/2010/05/bunny/trailer.mp4',
+        'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
+        'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/VolkswagenGTIReview.mp4'
     ];
+
+    const playerRef = useRef();
 
     const channelDown = () => {
         if (channel === 0) {
@@ -25,6 +27,7 @@ const Display = ({frame}) => {
         } else {
             setChannel(channel - 1)
         }
+        playerRef.current.load()
     }
 
     const channelUp = () => {
@@ -33,30 +36,31 @@ const Display = ({frame}) => {
         } else {
             setChannel(channel + 1)
         }
+        playerRef.current.load()
     }
 
     // Volume control
-    const [volume, setVolume] = useState(0.5)
+    const [volume, setVolume] = useState(1);
 
     const volumeDown = () => {
-        if (volume === 0) {
-            return
-        } else {
-            setVolume(volume - 0.05)
+        console.log('Volume from player: ' + playerRef.current.volume);
+        if (playerRef.current.volume >= 0.005) {
+            playerRef.current.volume -= 0.2;
+            setVolume(playerRef.current.volume);
         }
     }
 
     const volumeUp = () => {
-        if (volume === 1) {
-            return
-        } else {
-            setVolume(volume + 0.05)
-        }
+        console.log('Volume from player: ' + playerRef.current.volume);
+        if (playerRef.current.volume <= 0.995) {
+            playerRef.current.volume += 0.2;
+            setVolume(playerRef.current.volume);
+        } 
     }
 
     // Hand control
-    const distanceThreshold = 100; /* In milimeters */
-    const requiredDuration = 500; /* In miliseconds */
+    const distanceThreshold = 70; /* In milimeters */
+    const requiredDuration = 750; /* In miliseconds */
 
     const usePrevious = (value) => {
         const ref = useRef();
@@ -129,7 +133,7 @@ const Display = ({frame}) => {
             setCommandStartedAt(undefined);
         } else if (command !== previousCommand) {
             setCommandStartedAt(now);
-        }        
+        }
     }, [palmPosition, neutralPosition, command, commandStartedAt, previousCommand]);
 
     /* Trigger command */
@@ -159,25 +163,29 @@ const Display = ({frame}) => {
                 setCommand(null);
             }
         }
-    }, [frame, command, commandStartedAt])
+    }, [frame, command, commandStartedAt]);
 
     return(
-        <React.Fragment>
+        <div
+            style={{
+                position: 'absolute', 
+                left: '50%', 
+                top: '50%',
+                transform: 'translate(-50%, -50%)'
+            }}
+        >
             <PlayerCSSLink />
             <Player
+                autoPlay
+                fluid={false}
+                width={1600}
+                height={900}
                 src={videos[channel]}
-                ref={player => {
-                    player = player
-                    if (player) {
-                        player.volume = volume
-                        console.log(volume)
-                    }
-                }}
-            >
-                <ControlBar className="my-class" />
-            </Player>
-            <VolumeControl volume={volume}/>
-        </React.Fragment>
+                ref={playerRef}
+            />
+            <VolumeControl volume={volume ? volume : 0}/>
+            <ChannelControl channel={channel}/>
+        </div>
     )
 }
 

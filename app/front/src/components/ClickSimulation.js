@@ -170,7 +170,7 @@ const ClickSimulation = ({frame}) => {
                     setClickingEnabled(true);
                 }
             }
-    }, [fingersUp, horizontalButtonSelection, verticalButtonSelection, indexSpeed, clickingEnabled])
+    }, [fingersUp, horizontalButtonSelection, verticalButtonSelection, indexSpeed, clickingEnabled, lastClickedAt])
 
     // Button Click => log id to console
     const handleButtonClick = (id) => {
