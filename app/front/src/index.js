@@ -7,7 +7,7 @@ import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
   <React.StrictMode>
-    <LeapProvider options={{enableGestures: true}}>
+    <LeapProvider options={{ enableGestures: true }}>
       <App />
     </LeapProvider>
   </React.StrictMode>,
