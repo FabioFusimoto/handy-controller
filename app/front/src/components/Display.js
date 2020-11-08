@@ -71,10 +71,14 @@ const Display = ({ frame }) => {
 
   const [palmPosition, setPalmPosition] = useState([]);
   const [neutralPosition, setNeutralPosition] = useState([]);
+  const [fingersUp, setFingersUp] = useState(null);
+  const [rotationSpeed, setRotationSpeed] = useState(null);
 
   const [command, setCommand] = useState(null);
   const [commandStartedAt, setCommandStartedAt] = useState(undefined);
   const previousCommand = usePrevious(command);
+
+  const [palmNormal, setPalmNormal] = useState([null, null, null]);
 
   /* Update hands position from frame */
   useEffect(() => {
@@ -82,11 +86,13 @@ const Display = ({ frame }) => {
       frame.hands.sort((a, b) => (a.type > b.type) ? 0 : 1); /* Right hand has priority over left hand */
       if (frame.hands[0].confidence > 0.7) {
         setPalmPosition(frame.hands[0].palmPosition);
+        setPalmNormal(frame.hands[0].palmNormal);
       } else {
         setPalmPosition(['Nenhuma mão encontrada', 'Nenhuma mão encontrada', 'Nenhuma mão encontrada']);
       }
     } else {
       setPalmPosition(['Nenhuma mão encontrada', 'Nenhuma mão encontrada', 'Nenhuma mão encontrada']);
+      setPalmNormal([null, null, null]);
       setCommand(null);
     }
   }, [frame]);
@@ -96,13 +102,18 @@ const Display = ({ frame }) => {
     if (frame && frame.hands && frame.hands.length > 0) {
       frame.hands.sort((a, b) => (a.type > b.type) ? 0 : 1); /* Right hand has priority over left hand */
       const rightHand = frame.hands[0];
-      if (rightHand.fingers.every((f) => f.extended)) {
+      const newFingersUp = rightHand.fingers.filter(f => f.extended).length;
+
+      setFingersUp(newFingersUp);
+
+      if (newFingersUp === 0) {
         if (neutralPosition.length === 0) {
           setNeutralPosition(rightHand.palmPosition);
         }
-      } else if (rightHand.fingers.every((f) => !f.extended)) {
-        setNeutralPosition([]);
       }
+    } else {
+      setNeutralPosition([null, null, null]);
+      setFingersUp(null);
     }
   }, [frame, neutralPosition]);
 
@@ -177,13 +188,16 @@ const Display = ({ frame }) => {
       <Player
         autoPlay
         fluid={false}
-        width={1600}
-        height={900}
+        width={720}
+        height={480}
         src={videos[channel]}
         ref={playerRef}
       />
       <VolumeControl volume={volume || 0} />
       <ChannelControl channel={channel} />
+      <div>
+        Palm Normal X: {Number(palmNormal[0]).toFixed(3)} | Y = {Number(palmNormal[1]).toFixed(3)} | Z = {Number(palmNormal[2]).toFixed(3)}
+      </div>
     </div>
   );
 };
