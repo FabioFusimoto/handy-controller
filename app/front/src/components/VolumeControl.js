@@ -1,14 +1,14 @@
 import React from 'react';
 
-import volumeIcon from '../img/volume.png'
+import volumeIcon from '../img/volume.png';
 
-import './volumecontrol.css'
+import './volumecontrol.css';
 
-export default function VolumeControl({volume}) {
-    return (
-        <div>
-            <img className={'volume-icon'} src={volumeIcon} alt={'A speaker icon to represent volume'}/>
-            <p>{volume}</p>
-        </div>
-    )
+export default function VolumeControl ({ volume }) {
+  return (
+    <div>
+      <img className='volume-icon' src={volumeIcon} alt='A speaker icon to represent volume' />
+      <p>{Number(volume).toFixed(2)}</p>
+    </div>
+  );
 }

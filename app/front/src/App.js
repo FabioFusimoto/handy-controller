@@ -1,41 +1,47 @@
 import React from 'react';
-import { withLeapContainer } from 'react-leap'
+import { withLeapContainer } from 'react-leap';
 import {
   BrowserRouter as Router,
   Route,
   Switch
-} from "react-router-dom";
+} from 'react-router-dom';
 
 import './App.css';
 
 import ClickSimulation from './components/ClickSimulation';
 import Display from './components/Display';
+import ImageMenu from './components/ImageMenu';
 import LeapDebug from './components/LeapDebug';
 import Menu from './components/Menu';
 import MenuSettings from './components/MenuSettings';
 
-const App = ({frame}) => {
+const App = ({ frame }) => {
   return (
     <Router>
       <Switch>
         <div>
-          <Route exact path="/">
-            <div className="App">
-              <Display frame={frame}/>
+          <Route exact path='/'>
+            <div className='App'>
+              <Display frame={frame} />
             </div>
           </Route>
-          <Route exact path="/click-simulation">
-            <div className="ClickSimulation">
-              <ClickSimulation frame={frame}/>
+          <Route exact path='/click-simulation'>
+            <div className='ClickSimulation'>
+              <ClickSimulation frame={frame} />
             </div>
           </Route>
-          <Route path="/leap-debug">
-            <div className="LeapDebug">
+          <Route exact path='/image-menu'>
+            <div className='ImageMenu'>
+              <ImageMenu frame={frame} />
+            </div>
+          </Route>
+          <Route path='/leap-debug'>
+            <div className='LeapDebug'>
               <LeapDebug frame={frame} />
             </div>
           </Route>
-          <Route path="/menu">
-            <div className="Menu">
+          <Route path='/menu'>
+            <div className='Menu'>
               <Menu />
             </div>
           </Route>
@@ -48,6 +54,6 @@ const App = ({frame}) => {
       </Switch>
     </Router>
   );
-}
+};
 
 export default withLeapContainer(App);
