@@ -5,14 +5,14 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 
 // import icons from material.io
-import TvIcon from '@material-ui/icons/Tv';
-import BtIcon from '@material-ui/icons/Bluetooth'
-import SettingsIcon from '@material-ui/icons/Settings'
-import WifiIcon from '@material-ui/icons/Wifi'
-import SettInputIcon from '@material-ui/icons/SettingsInputHdmi'
-import YoutubeIcon from '@material-ui/icons/YouTube'
+import HomeIcon from '@material-ui/icons/Home'
+import ScheduleIcon from '@material-ui/icons/Schedule'
+import BrightIcon from '@material-ui/icons/Brightness5'
+import LanguageIcon from '@material-ui/icons/Language'
+import ImageIcon from '@material-ui/icons/ImageTwoTone'
+import MusicIcon from '@material-ui/icons/MusicNoteOutlined'
 
-const Menu = () => {
+const MenuSettings = () => {
 
     const buttonColums = 3;
     const buttonRows = 2;
@@ -35,7 +35,7 @@ const Menu = () => {
                     <Grid item xs={12/buttonColums}>
                         <Box display='flex' height='100%'>
                             <Button
-                            color='primary'
+                            color='default'
                             // id={'button_' + id}
                             fullWidth
                             onClick={() => handleButtonClick()}
@@ -43,8 +43,8 @@ const Menu = () => {
                             variant='outlined'
                             >
                                 <Box display='flex' flexDirection='column'>
-                                    <BtIcon style={{ fontSize: '10em' }}/>
-                                    Bluetooth
+                                    <HomeIcon style={{ fontSize: '10em' }}/>
+                                    Home
                                 </Box>
                             </Button>
                         </Box>
@@ -53,52 +53,16 @@ const Menu = () => {
                     <Grid item xs={12/buttonColums}>
                         <Box display='flex' height='100%'>
                             <Button
-                            color='action'
+                            style={{ color: 'orange'}}
                             // id={'button_' + id}
                             fullWidth
-                            onClick={() => handleButtonClick()}
+                            //onClick={() => handleButtonClick(id)}
                             //ref={button => buttonRefs.current[id] = button}
                             variant='outlined'
                             >
                                 <Box display='flex' flexDirection='column'>
-                                    <TvIcon style={{ fontSize: '10em' }}/>
-                                    TV
-                                </Box>
-                            </Button>
-                        </Box>
-                    </Grid>
-
-                    <Grid item xs={12/buttonColums}>
-                        <Box display='flex' height='100%'>
-                            <Button
-                            style={{ color: 'gray'}}
-                            // id={'button_' + id}
-                            fullWidth
-                            onClick={() => handleButtonClick()}
-                            //ref={button => buttonRefs.current[id] = button}
-                            variant='outlined'
-                            >
-                                <Box display='flex' flexDirection='column'>
-                                    <SettingsIcon style={{ fontSize: '10em' }}/>
-                                    Settings
-                                </Box>
-                            </Button>
-                        </Box>
-                    </Grid>
-
-                    <Grid item xs={12/buttonColums}>
-                        <Box display='flex' height='100%'>
-                            <Button
-                            color='primary'
-                            // id={'button_' + id}
-                            fullWidth
-                            onClick={() => handleButtonClick()}
-                            //ref={button => buttonRefs.current[id] = button}
-                            variant='outlined'
-                            >
-                                <Box display='flex' flexDirection='column'>
-                                    <WifiIcon style={{ fontSize: "10em" }}/>
-                                    Wifi
+                                    <BrightIcon style={{ fontSize: '10em' }}/>
+                                    Brightness
                                 </Box>
                             </Button>
                         </Box>
@@ -110,13 +74,13 @@ const Menu = () => {
                             color='default'
                             // id={'button_' + id}
                             fullWidth
-                            onClick={() => handleButtonClick()}
+                            //onClick={() => handleButtonClick(id)}
                             //ref={button => buttonRefs.current[id] = button}
                             variant='outlined'
                             >
                                 <Box display='flex' flexDirection='column'>
-                                    <SettInputIcon style={{ fontSize: '10em' }}/>
-                                    Input
+                                    <ScheduleIcon style={{ fontSize: '10em' }}/>
+                                    Time
                                 </Box>
                             </Button>
                         </Box>
@@ -125,16 +89,52 @@ const Menu = () => {
                     <Grid item xs={12/buttonColums}>
                         <Box display='flex' height='100%'>
                             <Button
-                            style={{ color: 'red'}}
+                            style={{ color: 'purple'}}
                             // id={'button_' + id}
                             fullWidth
-                            onClick={() => handleButtonClick()}
+                            //onClick={() => handleButtonClick(id)}
                             //ref={button => buttonRefs.current[id] = button}
                             variant='outlined'
                             >
                                 <Box display='flex' flexDirection='column'>
-                                    <YoutubeIcon style={{ fontSize: '10em' }}/>
-                                    Youtube
+                                    <LanguageIcon style={{ fontSize: "10em" }}/>
+                                    Language
+                                </Box>
+                            </Button>
+                        </Box>
+                    </Grid>
+
+                    <Grid item xs={12/buttonColums}>
+                        <Box display='flex' height='100%'>
+                            <Button
+                            color='default'
+                            // id={'button_' + id}
+                            fullWidth
+                            //onClick={() => handleButtonClick(id)}
+                            //ref={button => buttonRefs.current[id] = button}
+                            variant='outlined'
+                            >
+                                <Box display='flex' flexDirection='column'>
+                                    <ImageIcon style={{ fontSize: '10em' }}/>
+                                    Picture
+                                </Box>
+                            </Button>
+                        </Box>
+                    </Grid>
+
+                    <Grid item xs={12/buttonColums}>
+                        <Box display='flex' height='100%'>
+                            <Button
+                            style={{ color: 'blue'}}
+                            // id={'button_' + id}
+                            fullWidth
+                            //onClick={() => handleButtonClick(id)}
+                            //ref={button => buttonRefs.current[id] = button}
+                            variant='outlined'
+                            >
+                                <Box display='flex' flexDirection='column'>
+                                    <MusicIcon style={{ fontSize: '10em' }}/>
+                                    Audio
                                 </Box>
                             </Button>
                         </Box>
@@ -146,4 +146,4 @@ const Menu = () => {
     )
 }
 
-export default Menu;
+export default MenuSettings;
