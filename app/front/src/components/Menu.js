@@ -13,7 +13,6 @@ import SettInputIcon from '@material-ui/icons/SettingsInputHdmi'
 import YoutubeIcon from '@material-ui/icons/YouTube'
 
 const Menu = () => {
-
     const buttonColums = 3;
     const buttonRows = 2;
     const buttonIdArray = [...Array(buttonColums * buttonRows).keys()];
@@ -144,6 +143,6 @@ const Menu = () => {
             </Box>
         </Box>
     )
-}
+};
 
 export default Menu;
