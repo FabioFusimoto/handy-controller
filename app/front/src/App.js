@@ -13,6 +13,7 @@ import Display from './components/Display';
 import ImageMenu from './components/ImageMenu';
 import LeapDebug from './components/LeapDebug';
 import Menu from './components/Menu';
+import MenuSettings from './components/MenuSettings';
 
 const App = ({ frame }) => {
   return (
@@ -42,6 +43,11 @@ const App = ({ frame }) => {
           <Route path='/menu'>
             <div className='Menu'>
               <Menu />
+            </div>
+          </Route>
+          <Route path="/menu-settings">
+            <div className="MenuSettings">
+              <MenuSettings />
             </div>
           </Route>
         </div>
