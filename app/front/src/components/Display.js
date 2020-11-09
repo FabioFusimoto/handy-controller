@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useHistory } from "react-router-dom";
+import { useHistory } from 'react-router-dom';
 import { Player } from 'video-react';
+
+import Box from '@material-ui/core/Box';
 
 import ChannelControl from './ChannelControl';
 import VolumeControl from './VolumeControl';
@@ -78,7 +80,7 @@ const Display = ({ frame }) => {
   const [palmVelocity, setPalmVelocity] = useState(null);
   const velocityThreshold = 400; // In milimeters per second
   const [palmRotationVelocity, setPalmRotationVelocity] = useState(null);
-  const rotationVelocityThreshold = 0.003; // In radians per second
+  const rotationVelocityThreshold = 0.002; // In radians per second
   const history = useHistory();
 
   const [command, setCommand] = useState(null);
@@ -119,7 +121,7 @@ const Display = ({ frame }) => {
         fingersUp !== null && fingersUp > 0) {
       history.push('/click-simulation');
     }
-  }, [fingersUp, palmVelocity, palmRotationVelocity]);
+  }, [fingersUp, history, palmVelocity, palmRotationVelocity]);
 
   // Select the corresponding channel/volume
   useEffect(() => {
@@ -180,29 +182,37 @@ const Display = ({ frame }) => {
   }, [frame, command, commandStartedAt]);
 
   return (
-    <div
-      style={{
-        position: 'absolute',
-        left: '50%',
-        top: '50%',
-        transform: 'translate(-50%, -50%)'
-      }}
+    <Box
+      alignItems='center'
+      display='flex'
+      flexDirection='column'
+      justifyContent='center'
+      mx='20vh'
+      my='10vh'
     >
-      <PlayerCSSLink />
-      <Player
-        autoPlay
-        fluid={false}
-        width={720}
-        height={480}
-        src={videos[channel]}
-        ref={playerRef}
-      />
-      <VolumeControl volume={volume || 0} />
-      <ChannelControl channel={channel} />
-      <div>
+      <>
+        <PlayerCSSLink />
+        <Player
+          autoPlay
+          fluid={false}
+          width={720}
+          height={480}
+          src={videos[channel]}
+          ref={playerRef}
+        />
+      </>
+      <Box display='flex'>
+        <Box mx={4}>
+          <VolumeControl volume={volume * 100 || 0} />
+        </Box>
+        <Box mx={4}>
+          <ChannelControl channel={channel} />
+        </Box>
+      </Box>
+      <>
         Palm Rotation: {Number(palmRotation).toFixed(3)} | Palm Velocity: {Number(palmVelocity).toFixed(3)} | Palm Rotation Velocity: {Number(palmRotationVelocity).toFixed(3)} | Current framerate: {Number(frame.currentFrameRate).toFixed(0)}
-      </div>
-    </div>
+      </>
+    </Box>
   );
 };
 
