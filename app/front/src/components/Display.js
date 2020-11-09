@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useHistory } from "react-router-dom";
 import { Player } from 'video-react';
 
 import ChannelControl from './ChannelControl';
@@ -69,55 +70,58 @@ const Display = ({ frame }) => {
     return ref.current;
   };
 
-  const [palmPosition, setPalmPosition] = useState([]);
-  const [neutralPosition, setNeutralPosition] = useState([]);
+  const [palmPosition, setPalmPosition] = useState([null, null, null]);
+  const [neutralPosition, setNeutralPosition] = useState([null, null, null]);
   const [fingersUp, setFingersUp] = useState(null);
-  const [rotationSpeed, setRotationSpeed] = useState(null);
+  const [palmRotation, setPalmRotation] = useState(null);
+  const previousRotation = usePrevious(palmRotation);
+  const [palmVelocity, setPalmVelocity] = useState(null);
+  const velocityThreshold = 400; // In milimeters per second
+  const [palmRotationVelocity, setPalmRotationVelocity] = useState(null);
+  const rotationVelocityThreshold = 0.003; // In radians per second
+  const history = useHistory();
 
   const [command, setCommand] = useState(null);
   const [commandStartedAt, setCommandStartedAt] = useState(undefined);
   const previousCommand = usePrevious(command);
 
-  const [palmNormal, setPalmNormal] = useState([null, null, null]);
-
-  /* Update hands position from frame */
+  // Update positions from frame
   useEffect(() => {
     if (frame && frame.hands && frame.hands.length > 0) {
       frame.hands.sort((a, b) => (a.type > b.type) ? 0 : 1); /* Right hand has priority over left hand */
-      if (frame.hands[0].confidence > 0.7) {
-        setPalmPosition(frame.hands[0].palmPosition);
-        setPalmNormal(frame.hands[0].palmNormal);
-      } else {
-        setPalmPosition(['Nenhuma mão encontrada', 'Nenhuma mão encontrada', 'Nenhuma mão encontrada']);
+      setPalmPosition(frame.hands[0].palmPosition);
+
+      const newFingersUp = frame.hands[0].fingers.filter(f => f.extended).length;
+      setFingersUp(newFingersUp);
+      if (newFingersUp === 0) {
+        setNeutralPosition(frame.hands[0].palmPosition);
+        setPalmRotation(null);
       }
+      // Linear and angular velocity handler
+      const newRotation = frame.hands[0].palmNormal[0];
+      const newRotationSpeed = (previousRotation === null || newRotation === null) ? null : (newRotation - previousRotation) / frame.currentFrameRate;
+      setPalmRotation(newRotation);
+      setPalmRotationVelocity(newRotationSpeed);
+      setPalmVelocity(frame.hands[0].palmVelocity[0]);
     } else {
-      setPalmPosition(['Nenhuma mão encontrada', 'Nenhuma mão encontrada', 'Nenhuma mão encontrada']);
-      setPalmNormal([null, null, null]);
+      setPalmPosition([null, null, null]);
+      setPalmRotation(null);
+      setPalmRotationVelocity(null);
+      setPalmVelocity(null);
       setCommand(null);
     }
-  }, [frame]);
+  }, [frame, previousRotation]);
 
-  /* Update neutral position */
+  // Open menu depending on linear and angular palm velocity
   useEffect(() => {
-    if (frame && frame.hands && frame.hands.length > 0) {
-      frame.hands.sort((a, b) => (a.type > b.type) ? 0 : 1); /* Right hand has priority over left hand */
-      const rightHand = frame.hands[0];
-      const newFingersUp = rightHand.fingers.filter(f => f.extended).length;
-
-      setFingersUp(newFingersUp);
-
-      if (newFingersUp === 0) {
-        if (neutralPosition.length === 0) {
-          setNeutralPosition(rightHand.palmPosition);
-        }
-      }
-    } else {
-      setNeutralPosition([null, null, null]);
-      setFingersUp(null);
+    if (palmVelocity !== null && palmVelocity < (-velocityThreshold) &&
+        palmRotationVelocity !== null && palmRotationVelocity < (-rotationVelocityThreshold) &&
+        fingersUp !== null && fingersUp > 0) {
+      history.push('/click-simulation');
     }
-  }, [frame, neutralPosition]);
+  }, [fingersUp, palmVelocity, palmRotationVelocity]);
 
-  /* Select the corresponding command */
+  // Select the corresponding channel/volume
   useEffect(() => {
     const palmX = palmPosition[0];
     const palmZ = palmPosition[2];
@@ -196,7 +200,7 @@ const Display = ({ frame }) => {
       <VolumeControl volume={volume || 0} />
       <ChannelControl channel={channel} />
       <div>
-        Palm Normal X: {Number(palmNormal[0]).toFixed(3)} | Y = {Number(palmNormal[1]).toFixed(3)} | Z = {Number(palmNormal[2]).toFixed(3)}
+        Palm Rotation: {Number(palmRotation).toFixed(3)} | Palm Velocity: {Number(palmVelocity).toFixed(3)} | Palm Rotation Velocity: {Number(palmRotationVelocity).toFixed(3)} | Current framerate: {Number(frame.currentFrameRate).toFixed(0)}
       </div>
     </div>
   );
