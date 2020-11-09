@@ -5,6 +5,7 @@ import {
   Route,
   Switch
 } from 'react-router-dom';
+import { AnimatedRoute } from 'react-router-transition';
 
 import './App.css';
 
@@ -16,20 +17,35 @@ import Menu from './components/Menu';
 import MenuSettings from './components/MenuSettings';
 
 const App = ({ frame }) => {
+  const DisplayWithFrame = () => <Display frame={frame} />;
+  const ClickSimulationWithFrame = () => <ClickSimulation frame={frame} />;
+
   return (
     <Router>
       <Switch>
         <div>
-          <Route exact path='/'>
-            <div className='App'>
-              <Display frame={frame} />
-            </div>
-          </Route>
-          <Route exact path='/click-simulation'>
-            <div className='ClickSimulation'>
-              <ClickSimulation frame={frame} />
-            </div>
-          </Route>
+          <AnimatedRoute
+            exact
+            path='/'
+            render={DisplayWithFrame}
+            atEnter={{ offset: -100 }}
+            atLeave={{ offset: -100 }}
+            atActive={{ offset: 0 }}
+            mapStyles={(styles) => ({
+              transform: `translateX(${styles.offset}%)`
+            })}
+          />
+          <AnimatedRoute
+            exact
+            path='/click-simulation'
+            render={ClickSimulationWithFrame}
+            atEnter={{ offset: 100 }}
+            atLeave={{ offset: 100 }}
+            atActive={{ offset: 0 }}
+            mapStyles={(styles) => ({
+              transform: `translateX(${styles.offset}%)`
+            })}
+          />
           <Route exact path='/image-menu'>
             <div className='ImageMenu'>
               <ImageMenu frame={frame} />

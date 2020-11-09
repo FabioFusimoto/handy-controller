@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -28,6 +29,15 @@ const verticalThresholds = [];
 const buttonIdArray = [...Array(buttonColums * buttonRows).keys()];
 
 const ClickSimulation = ({ frame }) => {
+  // Helper function to refer to previous state
+  const usePrevious = (value) => {
+    const ref = useRef();
+    useEffect(() => {
+      ref.current = value;
+    });
+    return ref.current;
+  };
+
   // Button controls
   const buttonRefs = useRef([]);
 
@@ -48,6 +58,17 @@ const ClickSimulation = ({ frame }) => {
   const [updateSelection, setUpdateSelection] = useState(false);
   const [horizontalButtonSelection, setHorizontalButtonSelection] = useState(null);
   const [verticalButtonSelection, setVerticalButtonSelection] = useState(null);
+
+  // Navigate back to videos
+  const [palmRotation, setPalmRotation] = useState(null);
+  const [palmVelocity, setPalmVelocity] = useState(null);
+  const [palmRotationVelocity, setPalmRotationVelocity] = useState(null);
+
+  const velocityThreshold = 400; // In milimeters per second
+  const rotationVelocityThreshold = 0.002; // In radians per second
+
+  const history = useHistory();
+  const previousRotation = usePrevious(palmRotation);
 
   // Button controls
   const focusButton = (id) => {
@@ -86,6 +107,15 @@ const ClickSimulation = ({ frame }) => {
       // Index finger speed towards the LEAP Motion
       const indexFingertipSpeed = -frame.hands[0].indexFinger.tipVelocity[1]; // +y axis is perpendicular to LEAP, pointing out of the surface
       setIndexSpeed(indexFingertipSpeed);
+
+      // Linear palm velocity
+      setPalmVelocity(frame.hands[0].palmVelocity[0]);
+
+      // Angular velocity
+      const newRotation = frame.hands[0].palmNormal[0];
+      const newRotationSpeed = (previousRotation === null || newRotation === null) ? null : (newRotation - previousRotation) / frame.currentFrameRate;
+      setPalmRotation(newRotation);
+      setPalmRotationVelocity(newRotationSpeed);
     } else {
       // Palm position
       setPalmPosition([null, null, null]);
@@ -98,8 +128,14 @@ const ClickSimulation = ({ frame }) => {
 
       // Index finger speed
       setIndexSpeed(null);
+
+      // Linear palm velocity
+      setPalmVelocity(null);
+
+      // Angular palm velocity
+      setPalmRotationVelocity(null);
     }
-  }, [frame]);
+  }, [frame, previousRotation]);
 
   // Set button selection according to horizontal and vertical displacements
   useEffect(() => {
@@ -177,6 +213,15 @@ const ClickSimulation = ({ frame }) => {
   const handleButtonClick = (id) => {
     console.log('Button Clicked! Id = ' + id);
   };
+
+  // Go back to video display depending on linear and angular palm velocity
+  useEffect(() => {
+    if (palmVelocity !== null && palmVelocity > velocityThreshold &&
+        palmRotationVelocity !== null && palmRotationVelocity > rotationVelocityThreshold &&
+        fingersUp !== null && fingersUp > 0) {
+      history.push('/');
+    }
+  }, [fingersUp, history, palmVelocity, palmRotationVelocity]);
 
   const ContainedButton = (id) => {
     return (
