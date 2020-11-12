@@ -77,6 +77,8 @@ const Menu = ({ frame }) => {
   const history = useHistory();
   const previousRotation = usePrevious(palmRotation);
 
+  const [renderedAt, setRenderedAt] = useState(null);
+
   // Button controls
   const focusButton = (id) => {
     buttonRefs.current[id].focus();
@@ -123,6 +125,11 @@ const Menu = ({ frame }) => {
       const newRotationSpeed = (previousRotation === null || newRotation === null) ? null : (newRotation - previousRotation) / frame.currentFrameRate;
       setPalmRotation(newRotation);
       setPalmRotationVelocity(newRotationSpeed);
+
+      if (renderedAt === null) {
+        const now = new Date();
+        setRenderedAt(now.getTime());
+      }
     } else {
       // Palm position
       setPalmPosition([null, null, null]);
@@ -142,7 +149,7 @@ const Menu = ({ frame }) => {
       // Angular palm velocity
       setPalmRotationVelocity(null);
     }
-  }, [frame, previousRotation]);
+  }, [frame, previousRotation, renderedAt]);
 
   // Set button selection according to horizontal and vertical displacements
   useEffect(() => {
@@ -221,9 +228,12 @@ const Menu = ({ frame }) => {
     if (palmVelocity !== null && palmVelocity > velocityThreshold &&
         palmRotationVelocity !== null && palmRotationVelocity > rotationVelocityThreshold &&
         fingersUp !== null && fingersUp > 0) {
-      history.push('/');
+      const now = new Date();
+      if (now.getTime() - renderedAt >= 500) {
+        history.push('/');
+      }
     }
-  }, [fingersUp, history, palmVelocity, palmRotationVelocity]);
+  }, [fingersUp, history, palmVelocity, palmRotationVelocity, renderedAt]);
 
   // Go to Settings menu on click
   const goToSettings = () => history.push('/settings');

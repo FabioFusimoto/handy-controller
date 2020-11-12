@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
@@ -11,8 +12,8 @@ const horizontalRange = 20; // In milimeters
 const pinchThreshold = 0.7;
 const step = 5;
 
-const verticalLowerLimit = -100;
-const verticalUpperLimit = +100;
+const verticalLowerLimit = -125;
+const verticalUpperLimit = +125;
 const totalVerticalMovement = verticalUpperLimit - verticalLowerLimit;
 const sliderCount = namesAndValues.length;
 const verticalThresholds = [];
@@ -21,6 +22,15 @@ const verticalThresholds = [];
 });
 
 const ImageSettings = ({ frame }) => {
+  // Helper function to refer to previous state
+  const usePrevious = (value) => {
+    const ref = useRef();
+    useEffect(() => {
+      ref.current = value;
+    });
+    return ref.current;
+  };
+
   // Menu state
   const [sliderValues, setSliderValues] = useState(namesAndValues.map(nameAndVal => nameAndVal[1]));
 
@@ -31,6 +41,17 @@ const ImageSettings = ({ frame }) => {
   const [selectedSlider, setSelectedSlider] = useState(null);
   const [pinchStrength, setPinchStrength] = useState(null);
   const [pinchStartedAt, setPinchStartedAt] = useState(null);
+
+  // Navigate back to Menu
+  const [palmRotation, setPalmRotation] = useState(null);
+  const [palmVelocity, setPalmVelocity] = useState(null);
+  const [palmRotationVelocity, setPalmRotationVelocity] = useState(null);
+
+  const velocityThreshold = 400; // In milimeters per second
+  const rotationVelocityThreshold = 0.002; // In radians per second
+
+  const history = useHistory();
+  const previousRotation = usePrevious(palmRotation);
 
   // Track hand position
   useEffect(() => {
@@ -52,6 +73,15 @@ const ImageSettings = ({ frame }) => {
 
       // Pinch Strength
       setPinchStrength(frame.hands[0].pinchStrength);
+
+      // Linear palm velocity
+      setPalmVelocity(frame.hands[0].palmVelocity[0]);
+
+      // Angular velocity
+      const newRotation = frame.hands[0].palmNormal[0];
+      const newRotationSpeed = (previousRotation === null || newRotation === null) ? null : (newRotation - previousRotation) / frame.currentFrameRate;
+      setPalmRotation(newRotation);
+      setPalmRotationVelocity(newRotationSpeed);
     } else {
       // Palm position
       setPalmPosition([null, null, null]);
@@ -64,8 +94,14 @@ const ImageSettings = ({ frame }) => {
 
       // Pinch Strength
       setPinchStrength(null);
+
+      // Linear palm velocity
+      setPalmVelocity(null);
+
+      // Angular palm velocity
+      setPalmRotationVelocity(null);
     }
-  }, [frame]);
+  }, [frame, previousRotation]);
 
   // Slider selection (vertical)
   useEffect(() => {
@@ -121,10 +157,20 @@ const ImageSettings = ({ frame }) => {
     setSliderValues(currentValues);
   };
 
+  // Go to Settings after swipe gesture
+  useEffect(() => {
+    if (palmVelocity !== null && palmVelocity > velocityThreshold &&
+        palmRotationVelocity !== null && palmRotationVelocity > rotationVelocityThreshold &&
+        fingersUp !== null && fingersUp > 0) {
+      history.push('/settings');
+    }
+  }, [fingersUp, history, palmVelocity, palmRotationVelocity]);
+
   const MenuSlider = (id, name, defaultValue) =>
     <Box
-      my={2}
-      p={2}
+      px={2}
+      py={6}
+      mx={10}
       border={selectedSlider !== null && selectedSlider === id ? 1 : 0}
       borderColor='primary.main'
       borderRadius={16}

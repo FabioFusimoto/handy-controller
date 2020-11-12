@@ -1,3 +1,4 @@
+import { createBrowserHistory } from 'history';
 import React from 'react';
 import { withLeapContainer } from 'react-leap';
 import {
@@ -16,12 +17,15 @@ import Menu from './components/Menu';
 import Settings from './components/Settings';
 
 const App = ({ frame }) => {
+  const history = createBrowserHistory();
+
   const DisplayWithFrame = () => <Display frame={frame} />;
   const MenuWithFrame = () => <Menu frame={frame} />;
   const SettingsWithFrame = () => <Settings frame={frame} />;
+  const ImageSettingsWithFrame = () => <ImageSettings frame={frame} />;
 
   return (
-    <Router>
+    <Router histoy={history}>
       <Switch>
         <div>
           <AnimatedRoute
@@ -39,17 +43,25 @@ const App = ({ frame }) => {
             exact
             path='/menu'
             render={MenuWithFrame}
+            atEnter={{ offset: -100 }}
+            atLeave={{ offset: -100 }}
+            atActive={{ offset: 0 }}
+            mapStyles={(styles) => ({
+              transform: `translateX(${styles.offset}%)`
+            })}
+            onLeave={() => console.log('Leaving menu')}
+          />
+          <AnimatedRoute
+            exact
+            path='/image-settings'
+            render={ImageSettingsWithFrame}
             atEnter={{ offset: 100 }}
+            atLeave={{ offset: 100 }}
             atActive={{ offset: 0 }}
             mapStyles={(styles) => ({
               transform: `translateX(${styles.offset}%)`
             })}
           />
-          <Route exact path='/image-settings'>
-            <div className='ImageSettings'>
-              <ImageSettings frame={frame} />
-            </div>
-          </Route>
           <Route exact path='/leap-debug'>
             <div className='LeapDebug'>
               <LeapDebug frame={frame} />
@@ -59,7 +71,8 @@ const App = ({ frame }) => {
             exact
             path='/settings'
             render={SettingsWithFrame}
-            atEnter={{ offset: 100 }}
+            atEnter={{ offset: -100 }}
+            atLeave={{ offset: -100 }}
             atActive={{ offset: 0 }}
             mapStyles={(styles) => ({
               transform: `translateX(${styles.offset}%)`
