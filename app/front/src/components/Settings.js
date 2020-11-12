@@ -5,6 +5,13 @@ import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 
+import ScheduleIcon from '@material-ui/icons/Schedule';
+import Security from '@material-ui/icons/Security';
+import LanguageIcon from '@material-ui/icons/Language';
+import ImageIcon from '@material-ui/icons/ImageTwoTone';
+import MusicIcon from '@material-ui/icons/MusicNoteOutlined';
+import SettingsPower from '@material-ui/icons/SettingsPower';
+
 // Hands position ==> Button mapping
 const horizontalLowerLimit = -100;
 const horizontalUpperLimit = +100;
@@ -28,7 +35,7 @@ const verticalThresholds = [];
 
 const buttonIdArray = [...Array(buttonColums * buttonRows).keys()];
 
-const ClickSimulation = ({ frame }) => {
+const Menu = ({ frame }) => {
   // Helper function to refer to previous state
   const usePrevious = (value) => {
     const ref = useRef();
@@ -69,6 +76,8 @@ const ClickSimulation = ({ frame }) => {
 
   const history = useHistory();
   const previousRotation = usePrevious(palmRotation);
+
+  const [renderedAt, setRenderedAt] = useState(null);
 
   // Button controls
   const focusButton = (id) => {
@@ -116,6 +125,11 @@ const ClickSimulation = ({ frame }) => {
       const newRotationSpeed = (previousRotation === null || newRotation === null) ? null : (newRotation - previousRotation) / frame.currentFrameRate;
       setPalmRotation(newRotation);
       setPalmRotationVelocity(newRotationSpeed);
+
+      if (renderedAt === null) {
+        const now = new Date();
+        setRenderedAt(now.getTime());
+      }
     } else {
       // Palm position
       setPalmPosition([null, null, null]);
@@ -135,7 +149,7 @@ const ClickSimulation = ({ frame }) => {
       // Angular palm velocity
       setPalmRotationVelocity(null);
     }
-  }, [frame, previousRotation]);
+  }, [frame, previousRotation, renderedAt]);
 
   // Set button selection according to horizontal and vertical displacements
   useEffect(() => {
@@ -209,37 +223,24 @@ const ClickSimulation = ({ frame }) => {
     }
   }, [fingersUp, horizontalButtonSelection, verticalButtonSelection, indexSpeed, clickingEnabled, lastClickedAt]);
 
-  // Button Click => log id to console
-  const handleButtonClick = (id) => {
-    console.log('Button Clicked! Id = ' + id);
-  };
-
-  // Go back to video display depending on linear and angular palm velocity
+  // Go to display after swipe gesture
   useEffect(() => {
     if (palmVelocity !== null && palmVelocity > velocityThreshold &&
         palmRotationVelocity !== null && palmRotationVelocity > rotationVelocityThreshold &&
         fingersUp !== null && fingersUp > 0) {
-      history.push('/');
+      const now = new Date();
+      if (now.getTime() - renderedAt >= 500) {
+        history.push('/menu');
+      }
     }
-  }, [fingersUp, history, palmVelocity, palmRotationVelocity]);
+  }, [fingersUp, history, palmVelocity, palmRotationVelocity, renderedAt]);
 
-  const ContainedButton = (id) => {
-    return (
-      <Grid item xs={12 / buttonColums}>
-        <Box display='flex' height='100%'>
-          <Button
-            color='primary'
-            id={'button_' + id}
-            fullWidth
-            onClick={() => handleButtonClick(id)}
-            ref={(button) => { buttonRefs.current[id] = button; }}
-            variant='outlined'
-          >
-            Click Me! {id}
-          </Button>
-        </Box>
-      </Grid>
-    );
+  // Go to ImageSettings after button click
+  const goToImageSettings = () => history.push('/image-settings');
+
+  // Button Click => log id to console
+  const handleButtonClick = (id) => {
+    console.log('Button Clicked! Id = ' + id);
   };
 
   return (
@@ -251,7 +252,114 @@ const ClickSimulation = ({ frame }) => {
         my={5}
       >
         <Grid container spacing={3}>
-          {buttonIdArray.map(id => ContainedButton(id))}
+          <Grid item xs={12 / buttonColums}>
+            <Box display='flex' height='100%'>
+              <Button
+                style={{ color: 'magenta' }}
+                id='button_0'
+                fullWidth
+                onClick={() => handleButtonClick(0)}
+                ref={(button) => { buttonRefs.current[0] = button; }}
+                variant='outlined'
+              >
+                <Box display='flex' flexDirection='column'>
+                  <SettingsPower style={{ fontSize: '10em' }} />
+                  Power
+                </Box>
+              </Button>
+            </Box>
+          </Grid>
+
+          <Grid item xs={12 / buttonColums}>
+            <Box display='flex' height='100%'>
+              <Button
+                style={{ color: 'orange' }}
+                id='button_1'
+                fullWidth
+                onClick={() => handleButtonClick(1)}
+                ref={(button) => { buttonRefs.current[1] = button; }}
+                variant='outlined'
+              >
+                <Box display='flex' flexDirection='column'>
+                  <Security style={{ fontSize: '10em' }} />
+                  Security
+                </Box>
+              </Button>
+            </Box>
+          </Grid>
+
+          <Grid item xs={12 / buttonColums}>
+            <Box display='flex' height='100%'>
+              <Button
+                style={{ color: 'default' }}
+                id='button_2'
+                fullWidth
+                onClick={() => handleButtonClick(2)}
+                ref={(button) => { buttonRefs.current[2] = button; }}
+                variant='outlined'
+              >
+                <Box display='flex' flexDirection='column'>
+                  <ScheduleIcon style={{ fontSize: '10em' }} />
+                  Time
+                </Box>
+              </Button>
+            </Box>
+          </Grid>
+
+          <Grid item xs={12 / buttonColums}>
+            <Box display='flex' height='100%'>
+              <Button
+                style={{ color: 'purple' }}
+                id='button_3'
+                fullWidth
+                onClick={() => handleButtonClick(3)}
+                ref={(button) => { buttonRefs.current[3] = button; }}
+                variant='outlined'
+              >
+                <Box display='flex' flexDirection='column'>
+                  <LanguageIcon style={{ fontSize: '10em' }} />
+                  Language
+                </Box>
+              </Button>
+            </Box>
+          </Grid>
+
+          <Grid item xs={12 / buttonColums}>
+            <Box display='flex' height='100%'>
+              <Button
+                style={{ color: 'green' }}
+                id='button_4'
+                fullWidth
+                onClick={goToImageSettings}
+                ref={(button) => { buttonRefs.current[4] = button; }}
+                variant='outlined'
+              >
+                <Box display='flex' flexDirection='column'>
+                  <ImageIcon style={{ fontSize: '10em' }} />
+                  Image
+                </Box>
+              </Button>
+            </Box>
+          </Grid>
+
+          <Grid item xs={12 / buttonColums}>
+            <Box display='flex' height='100%'>
+              <Button
+                style={{ color: 'blue' }}
+                id='button_5'
+                fullWidth
+                onClick={() => handleButtonClick(5)}
+                ref={(button) => { buttonRefs.current[5] = button; }}
+                variant='outlined'
+              >
+                <Box display='flex' flexDirection='column'>
+                  <MusicIcon style={{ fontSize: '10em' }} />
+                  Audio
+                </Box>
+              </Button>
+            </Box>
+          </Grid>
+
         </Grid>
       </Box>
       <div>
@@ -270,4 +378,4 @@ const ClickSimulation = ({ frame }) => {
   );
 };
 
-export default ClickSimulation;
+export default Menu;

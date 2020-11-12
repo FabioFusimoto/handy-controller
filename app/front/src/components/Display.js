@@ -119,7 +119,7 @@ const Display = ({ frame }) => {
     if (palmVelocity !== null && palmVelocity < (-velocityThreshold) &&
         palmRotationVelocity !== null && palmRotationVelocity < (-rotationVelocityThreshold) &&
         fingersUp !== null && fingersUp > 0) {
-      history.push('/click-simulation');
+      history.push('/menu');
     }
   }, [fingersUp, history, palmVelocity, palmRotationVelocity]);
 
