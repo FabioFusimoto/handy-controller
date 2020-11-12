@@ -5,12 +5,12 @@ import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 
-import TvIcon from '@material-ui/icons/Tv';
-import BtIcon from '@material-ui/icons/Bluetooth';
-import SettingsIcon from '@material-ui/icons/Settings';
-import WifiIcon from '@material-ui/icons/Wifi';
-import SettInputIcon from '@material-ui/icons/SettingsInputHdmi';
-import YoutubeIcon from '@material-ui/icons/YouTube';
+import ScheduleIcon from '@material-ui/icons/Schedule';
+import Security from '@material-ui/icons/Security';
+import LanguageIcon from '@material-ui/icons/Language';
+import ImageIcon from '@material-ui/icons/ImageTwoTone';
+import MusicIcon from '@material-ui/icons/MusicNoteOutlined';
+import SettingsPower from '@material-ui/icons/SettingsPower';
 
 // Hands position ==> Button mapping
 const horizontalLowerLimit = -100;
@@ -35,7 +35,7 @@ const verticalThresholds = [];
 
 const buttonIdArray = [...Array(buttonColums * buttonRows).keys()];
 
-const ClickSimulation = ({ frame }) => {
+const Menu = ({ frame }) => {
   // Helper function to refer to previous state
   const usePrevious = (value) => {
     const ref = useRef();
@@ -216,6 +216,18 @@ const ClickSimulation = ({ frame }) => {
     }
   }, [fingersUp, horizontalButtonSelection, verticalButtonSelection, indexSpeed, clickingEnabled, lastClickedAt]);
 
+  // Go to display after swipe gesture
+  useEffect(() => {
+    if (palmVelocity !== null && palmVelocity > velocityThreshold &&
+        palmRotationVelocity !== null && palmRotationVelocity > rotationVelocityThreshold &&
+        fingersUp !== null && fingersUp > 0) {
+      history.push('/');
+    }
+  }, [fingersUp, history, palmVelocity, palmRotationVelocity]);
+
+  // Go to Settings menu on click
+  const goToSettings = () => history.push('/settings');
+
   // Button Click => log id to console
   const handleButtonClick = (id) => {
     console.log('Button Clicked! Id = ' + id);
@@ -233,7 +245,7 @@ const ClickSimulation = ({ frame }) => {
           <Grid item xs={12 / buttonColums}>
             <Box display='flex' height='100%'>
               <Button
-                color='primary'
+                style={{ color: 'magenta' }}
                 id='button_0'
                 fullWidth
                 onClick={() => handleButtonClick(0)}
@@ -241,8 +253,8 @@ const ClickSimulation = ({ frame }) => {
                 variant='outlined'
               >
                 <Box display='flex' flexDirection='column'>
-                  <BtIcon style={{ fontSize: '10em' }} />
-                  Bluetooth
+                  <SettingsPower style={{ fontSize: '10em' }} />
+                  Power
                 </Box>
               </Button>
             </Box>
@@ -251,7 +263,7 @@ const ClickSimulation = ({ frame }) => {
           <Grid item xs={12 / buttonColums}>
             <Box display='flex' height='100%'>
               <Button
-                color='action'
+                style={{ color: 'orange' }}
                 id='button_1'
                 fullWidth
                 onClick={() => handleButtonClick(1)}
@@ -259,8 +271,8 @@ const ClickSimulation = ({ frame }) => {
                 variant='outlined'
               >
                 <Box display='flex' flexDirection='column'>
-                  <TvIcon style={{ fontSize: '10em' }} />
-                  TV
+                  <Security style={{ fontSize: '10em' }} />
+                  Security
                 </Box>
               </Button>
             </Box>
@@ -269,16 +281,16 @@ const ClickSimulation = ({ frame }) => {
           <Grid item xs={12 / buttonColums}>
             <Box display='flex' height='100%'>
               <Button
-                style={{ color: 'gray' }}
+                style={{ color: 'default' }}
                 id='button_2'
                 fullWidth
-                onClick={() => handleButtonClick(2)}
+                onClick={goToSettings}
                 ref={(button) => { buttonRefs.current[2] = button; }}
                 variant='outlined'
               >
                 <Box display='flex' flexDirection='column'>
-                  <SettingsIcon style={{ fontSize: '10em' }} />
-                  Settings
+                  <ScheduleIcon style={{ fontSize: '10em' }} />
+                  Time
                 </Box>
               </Button>
             </Box>
@@ -287,7 +299,7 @@ const ClickSimulation = ({ frame }) => {
           <Grid item xs={12 / buttonColums}>
             <Box display='flex' height='100%'>
               <Button
-                color='primary'
+                style={{ color: 'purple' }}
                 id='button_3'
                 fullWidth
                 onClick={() => handleButtonClick(3)}
@@ -295,8 +307,8 @@ const ClickSimulation = ({ frame }) => {
                 variant='outlined'
               >
                 <Box display='flex' flexDirection='column'>
-                  <WifiIcon style={{ fontSize: '10em' }} />
-                  Wifi
+                  <LanguageIcon style={{ fontSize: '10em' }} />
+                  Language
                 </Box>
               </Button>
             </Box>
@@ -305,7 +317,7 @@ const ClickSimulation = ({ frame }) => {
           <Grid item xs={12 / buttonColums}>
             <Box display='flex' height='100%'>
               <Button
-                color='default'
+                style={{ color: 'green' }}
                 id='button_4'
                 fullWidth
                 onClick={() => handleButtonClick(4)}
@@ -313,8 +325,8 @@ const ClickSimulation = ({ frame }) => {
                 variant='outlined'
               >
                 <Box display='flex' flexDirection='column'>
-                  <SettInputIcon style={{ fontSize: '10em' }} />
-                  Input
+                  <ImageIcon style={{ fontSize: '10em' }} />
+                  Image
                 </Box>
               </Button>
             </Box>
@@ -323,7 +335,7 @@ const ClickSimulation = ({ frame }) => {
           <Grid item xs={12 / buttonColums}>
             <Box display='flex' height='100%'>
               <Button
-                style={{ color: 'red' }}
+                style={{ color: 'blue' }}
                 id='button_5'
                 fullWidth
                 onClick={() => handleButtonClick(5)}
@@ -331,8 +343,8 @@ const ClickSimulation = ({ frame }) => {
                 variant='outlined'
               >
                 <Box display='flex' flexDirection='column'>
-                  <YoutubeIcon style={{ fontSize: '10em' }} />
-                  YouTube
+                  <MusicIcon style={{ fontSize: '10em' }} />
+                  Audio
                 </Box>
               </Button>
             </Box>
@@ -356,4 +368,4 @@ const ClickSimulation = ({ frame }) => {
   );
 };
 
-export default ClickSimulation;
+export default Menu;

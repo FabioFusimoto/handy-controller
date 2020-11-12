@@ -9,16 +9,16 @@ import { AnimatedRoute } from 'react-router-transition';
 
 import './App.css';
 
-import ClickSimulation from './components/ClickSimulation';
 import Display from './components/Display';
-import ImageMenu from './components/ImageMenu';
+import ImageSettings from './components/ImageSettings';
 import LeapDebug from './components/LeapDebug';
 import Menu from './components/Menu';
-import MenuSettings from './components/MenuSettings';
+import Settings from './components/Settings';
 
 const App = ({ frame }) => {
   const DisplayWithFrame = () => <Display frame={frame} />;
-  const ClickSimulationWithFrame = () => <ClickSimulation frame={frame} />;
+  const MenuWithFrame = () => <Menu frame={frame} />;
+  const SettingsWithFrame = () => <Settings frame={frame} />;
 
   return (
     <Router>
@@ -37,35 +37,34 @@ const App = ({ frame }) => {
           />
           <AnimatedRoute
             exact
-            path='/click-simulation'
-            render={ClickSimulationWithFrame}
+            path='/menu'
+            render={MenuWithFrame}
             atEnter={{ offset: 100 }}
-            atLeave={{ offset: 100 }}
             atActive={{ offset: 0 }}
             mapStyles={(styles) => ({
               transform: `translateX(${styles.offset}%)`
             })}
           />
-          <Route exact path='/image-menu'>
-            <div className='ImageMenu'>
-              <ImageMenu frame={frame} />
+          <Route exact path='/image-settings'>
+            <div className='ImageSettings'>
+              <ImageSettings frame={frame} />
             </div>
           </Route>
-          <Route path='/leap-debug'>
+          <Route exact path='/leap-debug'>
             <div className='LeapDebug'>
               <LeapDebug frame={frame} />
             </div>
           </Route>
-          <Route path='/menu'>
-            <div className='Menu'>
-              <Menu />
-            </div>
-          </Route>
-          <Route path='/menu-settings'>
-            <div className='MenuSettings'>
-              <MenuSettings />
-            </div>
-          </Route>
+          <AnimatedRoute
+            exact
+            path='/settings'
+            render={SettingsWithFrame}
+            atEnter={{ offset: 100 }}
+            atActive={{ offset: 0 }}
+            mapStyles={(styles) => ({
+              transform: `translateX(${styles.offset}%)`
+            })}
+          />
         </div>
       </Switch>
     </Router>

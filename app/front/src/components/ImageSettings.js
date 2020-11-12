@@ -20,7 +20,7 @@ const verticalThresholds = [];
   verticalThresholds.push(verticalLowerLimit + (i + 1) * totalVerticalMovement / sliderCount);
 });
 
-const ImageMenu = ({ frame }) => {
+const ImageSettings = ({ frame }) => {
   // Menu state
   const [sliderValues, setSliderValues] = useState(namesAndValues.map(nameAndVal => nameAndVal[1]));
 
@@ -161,4 +161,4 @@ const ImageMenu = ({ frame }) => {
   );
 };
 
-export default ImageMenu;
+export default ImageSettings;
