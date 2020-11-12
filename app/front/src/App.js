@@ -61,8 +61,8 @@ const App = ({ frame }) => {
               <Menu />
             </div>
           </Route>
-          <Route path="/menu-settings">
-            <div className="MenuSettings">
+          <Route path='/menu-settings'>
+            <div className='MenuSettings'>
               <MenuSettings />
             </div>
           </Route>

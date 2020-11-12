@@ -5,6 +5,13 @@ import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 
+import TvIcon from '@material-ui/icons/Tv';
+import BtIcon from '@material-ui/icons/Bluetooth';
+import SettingsIcon from '@material-ui/icons/Settings';
+import WifiIcon from '@material-ui/icons/Wifi';
+import SettInputIcon from '@material-ui/icons/SettingsInputHdmi';
+import YoutubeIcon from '@material-ui/icons/YouTube';
+
 // Hands position ==> Button mapping
 const horizontalLowerLimit = -100;
 const horizontalUpperLimit = +100;
@@ -214,34 +221,6 @@ const ClickSimulation = ({ frame }) => {
     console.log('Button Clicked! Id = ' + id);
   };
 
-  // Go back to video display depending on linear and angular palm velocity
-  useEffect(() => {
-    if (palmVelocity !== null && palmVelocity > velocityThreshold &&
-        palmRotationVelocity !== null && palmRotationVelocity > rotationVelocityThreshold &&
-        fingersUp !== null && fingersUp > 0) {
-      history.push('/');
-    }
-  }, [fingersUp, history, palmVelocity, palmRotationVelocity]);
-
-  const ContainedButton = (id) => {
-    return (
-      <Grid item xs={12 / buttonColums}>
-        <Box display='flex' height='100%'>
-          <Button
-            color='primary'
-            id={'button_' + id}
-            fullWidth
-            onClick={() => handleButtonClick(id)}
-            ref={(button) => { buttonRefs.current[id] = button; }}
-            variant='outlined'
-          >
-            Click Me! {id}
-          </Button>
-        </Box>
-      </Grid>
-    );
-  };
-
   return (
     <Box>
       <Box
@@ -251,7 +230,114 @@ const ClickSimulation = ({ frame }) => {
         my={5}
       >
         <Grid container spacing={3}>
-          {buttonIdArray.map(id => ContainedButton(id))}
+          <Grid item xs={12 / buttonColums}>
+            <Box display='flex' height='100%'>
+              <Button
+                color='primary'
+                id='button_0'
+                fullWidth
+                onClick={() => handleButtonClick(0)}
+                ref={(button) => { buttonRefs.current[0] = button; }}
+                variant='outlined'
+              >
+                <Box display='flex' flexDirection='column'>
+                  <BtIcon style={{ fontSize: '10em' }} />
+                  Bluetooth
+                </Box>
+              </Button>
+            </Box>
+          </Grid>
+
+          <Grid item xs={12 / buttonColums}>
+            <Box display='flex' height='100%'>
+              <Button
+                color='action'
+                id='button_1'
+                fullWidth
+                onClick={() => handleButtonClick(1)}
+                ref={(button) => { buttonRefs.current[1] = button; }}
+                variant='outlined'
+              >
+                <Box display='flex' flexDirection='column'>
+                  <TvIcon style={{ fontSize: '10em' }} />
+                  TV
+                </Box>
+              </Button>
+            </Box>
+          </Grid>
+
+          <Grid item xs={12 / buttonColums}>
+            <Box display='flex' height='100%'>
+              <Button
+                style={{ color: 'gray' }}
+                id='button_2'
+                fullWidth
+                onClick={() => handleButtonClick(2)}
+                ref={(button) => { buttonRefs.current[2] = button; }}
+                variant='outlined'
+              >
+                <Box display='flex' flexDirection='column'>
+                  <SettingsIcon style={{ fontSize: '10em' }} />
+                  Settings
+                </Box>
+              </Button>
+            </Box>
+          </Grid>
+
+          <Grid item xs={12 / buttonColums}>
+            <Box display='flex' height='100%'>
+              <Button
+                color='primary'
+                id='button_3'
+                fullWidth
+                onClick={() => handleButtonClick(3)}
+                ref={(button) => { buttonRefs.current[3] = button; }}
+                variant='outlined'
+              >
+                <Box display='flex' flexDirection='column'>
+                  <WifiIcon style={{ fontSize: '10em' }} />
+                  Wifi
+                </Box>
+              </Button>
+            </Box>
+          </Grid>
+
+          <Grid item xs={12 / buttonColums}>
+            <Box display='flex' height='100%'>
+              <Button
+                color='default'
+                id='button_4'
+                fullWidth
+                onClick={() => handleButtonClick(4)}
+                ref={(button) => { buttonRefs.current[4] = button; }}
+                variant='outlined'
+              >
+                <Box display='flex' flexDirection='column'>
+                  <SettInputIcon style={{ fontSize: '10em' }} />
+                  Input
+                </Box>
+              </Button>
+            </Box>
+          </Grid>
+
+          <Grid item xs={12 / buttonColums}>
+            <Box display='flex' height='100%'>
+              <Button
+                style={{ color: 'red' }}
+                id='button_5'
+                fullWidth
+                onClick={() => handleButtonClick(5)}
+                ref={(button) => { buttonRefs.current[5] = button; }}
+                variant='outlined'
+              >
+                <Box display='flex' flexDirection='column'>
+                  <YoutubeIcon style={{ fontSize: '10em' }} />
+                  YouTube
+                </Box>
+              </Button>
+            </Box>
+          </Grid>
+
         </Grid>
       </Box>
       <div>
