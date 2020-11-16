@@ -193,7 +193,7 @@ const Display = ({ frame }) => {
       <>
         <PlayerCSSLink />
         <Player
-          autoPlay
+          // autoPlay
           fluid={false}
           width={720}
           height={480}
