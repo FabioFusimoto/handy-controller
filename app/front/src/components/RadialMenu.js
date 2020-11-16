@@ -4,14 +4,16 @@ import './RadialMenu.css'
 export function RadialMenu({command}) {
 
     return (
-        <>
-            <p className={command === 'channelUp' ? 'selected' : null}>CH +</p>
-            <div className={"channel-inline"}>
-                <p className={command === 'volumeDown' ? 'selected' : null}>Vol -</p>
-                <p>Menu</p>
-                <p className={command === 'volumeUp' ? 'selected' : null}>Vol +</p>
+        <div className={'container'}>
+            <div className={'columns'}>
+                <p className={command === 'channelUp' ? 'selected' : 'not-selected'}>CH +</p>
+                <div className={"channel-inline"}>
+                    <p className={command === 'volumeDown' ? 'selected' : 'not-selected'}>Vol -</p>
+                    <p className={command === 'menu' ? 'selected' : 'not-selected'}>Menu</p>
+                    <p className={command === 'volumeUp' ? 'selected' : 'not-selected'}>Vol +</p>
+                </div>
+                <p className={command === 'channelDown' ? 'selected' : 'not-selected'}>CH -</p>
             </div>
-            <p className={command === 'channelDown' ? 'selected' : null}>CH -</p>
-        </>
+        </div>
     )
 }

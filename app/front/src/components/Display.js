@@ -148,6 +148,7 @@ const Display = ({ frame }) => {
       setCommandMenu('volumeDown');
     } else {
       setCommand(null);
+      setCommandMenu('menu')
     }
 
     const now = new Date();
@@ -219,7 +220,7 @@ const Display = ({ frame }) => {
       <>
         Palm Rotation: {Number(palmRotation).toFixed(3)} | Palm Velocity: {Number(palmVelocity).toFixed(3)} | Palm Rotation Velocity: {Number(palmRotationVelocity).toFixed(3)} | Current framerate: {Number(frame.currentFrameRate).toFixed(0)}
       </>
-      {showRadialMenu && <RadialMenu command={'volumeDown'} />}
+      {showRadialMenu && <RadialMenu command={commandMenu} />}
     </Box>
   );
 };
