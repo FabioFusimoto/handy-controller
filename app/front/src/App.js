@@ -19,8 +19,8 @@ import TopBar from './components/TopBar';
 const App = ({ frame }) => {
   const [gesturesEnabled, setGesturesEnabled] = useState(true);
 
-  const toggleGesturesEnabled = (newState) => {
-    setGesturesEnabled(newState);
+  const toggleGesturesEnabled = (newToggle) => {
+    setGesturesEnabled(newToggle);
   };
 
   const DisplayWithFrame = () => <Display frame={gesturesEnabled ? frame : null} />;
