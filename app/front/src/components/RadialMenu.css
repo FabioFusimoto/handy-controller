@@ -1,0 +1,9 @@
+.channel-inline {
+    display: flex;
+    width: 200px;
+    justify-content: space-between;
+}
+
+.selected {
+    background-color: orange;
+}

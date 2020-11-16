@@ -8,8 +8,11 @@ import ChannelControl from './ChannelControl';
 import VolumeControl from './VolumeControl';
 
 import { PlayerCSSLink } from './PlayerCSSLink';
+import { RadialMenu } from './RadialMenu'
 
 const Display = ({ frame }) => {
+  const [showRadialMenu, setShowRadialMenu] = useState(true)
+  const [commandMenu, setCommandMenu] = useState('')
   // Channel control
   const [channel, setChannel] = useState(0);
 
@@ -133,12 +136,16 @@ const Display = ({ frame }) => {
 
     if (palmZ < (neutralZ - distanceThreshold)) {
       setCommand('channelUp');
+      setCommandMenu('channelUp');
     } else if (palmZ > (neutralZ + distanceThreshold)) {
       setCommand('channelDown');
+      setCommandMenu('channelDown');
     } else if (palmX > (neutralX + distanceThreshold)) {
       setCommand('volumeUp');
+      setCommandMenu('volumeUp');
     } else if (palmX < (neutralX - distanceThreshold)) {
       setCommand('volumeDown');
+      setCommandMenu('volumeDown');
     } else {
       setCommand(null);
     }
@@ -212,6 +219,7 @@ const Display = ({ frame }) => {
       <>
         Palm Rotation: {Number(palmRotation).toFixed(3)} | Palm Velocity: {Number(palmVelocity).toFixed(3)} | Palm Rotation Velocity: {Number(palmRotationVelocity).toFixed(3)} | Current framerate: {Number(frame.currentFrameRate).toFixed(0)}
       </>
+      {showRadialMenu && <RadialMenu command={'volumeDown'} />}
     </Box>
   );
 };
