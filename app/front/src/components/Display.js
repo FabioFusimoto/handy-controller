@@ -214,11 +214,11 @@ const Display = ({ frame }) => {
           <VolumeControl volume={volume * 100 || 0} />
         </Box>
         <Box mx={4}>
-          <ChannelControl channel={channel} />
+          <ChannelControl channel={channel || 0} />
         </Box>
       </Box>
       <>
-        Palm Rotation: {Number(palmRotation).toFixed(3)} | Palm Velocity: {Number(palmVelocity).toFixed(3)} | Palm Rotation Velocity: {Number(palmRotationVelocity).toFixed(3)} | Current framerate: {Number(frame.currentFrameRate).toFixed(0)}
+        Palm Rotation: {Number(palmRotation).toFixed(3)} | Palm Velocity: {Number(palmVelocity).toFixed(3)} | Palm Rotation Velocity: {Number(palmRotationVelocity).toFixed(3)} | Current framerate: {Number(frame ? frame.currentFrameRate : 0).toFixed(0)}
       </>
       {showRadialMenu && <RadialMenu command={commandMenu} />}
     </Box>
