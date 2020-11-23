@@ -87,8 +87,8 @@ const TopBar = ({ frame, gesturesEnabled, toggleGesturesEnabled }) => {
             <Button
               color='secondary'
               onClick={() => toggleGesturesEnabled(!gesturesEnabled)}
-              style={{ backgroundColor: '#FFFFFF' }}
-              variant='outlined'
+              style={{ backgroundColor: 'secondary' }}
+              variant='contained'
             >
               Ativar/desativar
             </Button>

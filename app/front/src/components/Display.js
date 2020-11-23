@@ -20,7 +20,7 @@ const usePrevious = (value) => {
 };
 
 const Display = ({ frame }) => {
-  const [showRadialMenu, setShowRadialMenu] = useState(true);
+  const [showRadialMenu, setShowRadialMenu] = useState(false);
   // Channel control
   const [channel, setChannel] = useState(0);
 
@@ -106,7 +106,7 @@ const Display = ({ frame }) => {
     if (frame && frame.hands && frame.hands.length > 0) {
       frame.hands.sort((a, b) => (a.type > b.type) ? 0 : 1); /* Right hand has priority over left hand */
       setPalmPosition(frame.hands[0].palmPosition);
-
+      
       const newFingersUp = frame.hands[0].fingers.filter(f => f.extended).length;
       setFingersUp(newFingersUp);
       if (newFingersUp === 0) {
@@ -119,12 +119,14 @@ const Display = ({ frame }) => {
       setPalmRotation(newRotation);
       setPalmRotationVelocity(newRotationSpeed);
       setPalmVelocity(frame.hands[0].palmVelocity[0]);
+      setShowRadialMenu(true);
     } else {
       setPalmPosition([null, null, null]);
       setPalmRotation(null);
       setPalmRotationVelocity(null);
       setPalmVelocity(null);
       setCommand(null);
+      setShowRadialMenu(false);
     }
   }, [frame, previousRotation]);
 
@@ -229,17 +231,20 @@ const Display = ({ frame }) => {
         />
       </>
       <Box display='flex'>
-        <Box mx={4}>
-          <VolumeControl volume={volume * 100 || 0} />
-        </Box>
-        <Box mx={4}>
-          <ChannelControl channel={channel || 0} />
-        </Box>
+        {(command === 'volumeUp' || command === 'volumeDown' ||
+          command === 'volumeUpIntention' || command === 'volumeDownIntention') &&
+          <Box mx={4}>
+            <VolumeControl volume={volume * 100 || 0} />
+          </Box>
+        } 
+        {(command === 'channelUp' || command === 'channelDown' ||
+          command === 'channelUpIntention' || command === 'channelDownIntention') &&
+          <Box mx={4}>
+            <ChannelControl channel={channel || 0} />
+          </Box>
+        }
       </Box>
-      <>
-        Palm Rotation: {Number(palmRotation).toFixed(3)} | Palm Velocity: {Number(palmVelocity).toFixed(3)} | Palm Rotation Velocity: {Number(palmRotationVelocity).toFixed(3)} | Current framerate: {Number(frame ? frame.currentFrameRate : 0).toFixed(0)}
-      </>
-      {showRadialMenu && <RadialMenu command={command || 'menu'} />}
+      {true && <RadialMenu command={command || 'menu'} />}
     </Box>
   );
 };
