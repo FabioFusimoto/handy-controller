@@ -12,27 +12,34 @@ export function RadialMenu ({ command }) {
     switch (command) {
       case 'volumeUp':
         setVolumeUpClass('selected')
+        setMenuClass('not-selected')
         break;
       case 'volumeDown':
         setVolumeDownClass('selected')
+        setMenuClass('not-selected')
         break;
       case 'channelUp':
         setChannelUpClass('selected')
+        setMenuClass('not-selected')
         break;
       case 'channelDown':
         setChannelDownClass('selected')
+        setMenuClass('not-selected')
         break;
       case 'volumeUpIntention':
         setVolumeUpClass('intention-selected')
+        setMenuClass('not-selected')
         break;
       case 'volumeDownIntention':
         setVolumeDownClass('intention-selected')
+        setMenuClass('not-selected')
         break;
       case 'channelUpIntention':
         setChannelUpClass('intention-selected')
         break;
       case 'channelDownIntention':
         setChannelDownClass('intention-selected')
+        setMenuClass('not-selected')
         break;
       default:
         setMenuClass('selected')
