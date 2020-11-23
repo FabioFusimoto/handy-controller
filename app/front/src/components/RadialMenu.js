@@ -6,7 +6,7 @@ export function RadialMenu ({ command }) {
     <div className='container'>
       <div className='columns'>
         <p className={command === 'channelUp' ? 'selected' : 'not-selected'}>CH +</p>
-        <div className='channel-inline'>
+        <div className='volume-inline'>
           <p className={command === 'volumeDown' ? 'selected' : 'not-selected'}>Vol -</p>
           <p className={command === 'menu' ? 'selected' : 'not-selected'}>Menu</p>
           <p className={command === 'volumeUp' ? 'selected' : 'not-selected'}>Vol +</p>
