@@ -11,7 +11,7 @@ import { PlayerCSSLink } from './PlayerCSSLink';
 import { RadialMenu } from './RadialMenu';
 
 const Display = ({ frame }) => {
-  const [showRadialMenu, setShowRadialMenu] = useState(true);
+  const [showRadialMenu, setShowRadialMenu] = useState(false);
   // Channel control
   const [channel, setChannel] = useState(0);
 
@@ -94,7 +94,7 @@ const Display = ({ frame }) => {
     if (frame && frame.hands && frame.hands.length > 0) {
       frame.hands.sort((a, b) => (a.type > b.type) ? 0 : 1); /* Right hand has priority over left hand */
       setPalmPosition(frame.hands[0].palmPosition);
-
+      
       const newFingersUp = frame.hands[0].fingers.filter(f => f.extended).length;
       setFingersUp(newFingersUp);
       if (newFingersUp === 0) {
@@ -107,12 +107,14 @@ const Display = ({ frame }) => {
       setPalmRotation(newRotation);
       setPalmRotationVelocity(newRotationSpeed);
       setPalmVelocity(frame.hands[0].palmVelocity[0]);
+      setShowRadialMenu(true);
     } else {
       setPalmPosition([null, null, null]);
       setPalmRotation(null);
       setPalmRotationVelocity(null);
       setPalmVelocity(null);
       setCommand(null);
+      setShowRadialMenu(false);
     }
   }, [frame, previousRotation]);
 
