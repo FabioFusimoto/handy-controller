@@ -9,7 +9,8 @@ export default function VolumeControl ({ volume }) {
   return (
     <Box alignItems='center' display='flex' flexDirection='column'>
       <img className='volume-icon' src={volumeIcon} alt='A speaker icon to represent volume' />
-      <p>{Number(volume).toFixed(0)}</p>
+      <progress value={volume} max={100} />
+      <>{Number(volume).toFixed(0)}</>
     </Box>
   );
 }
