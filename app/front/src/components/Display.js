@@ -8,11 +8,10 @@ import ChannelControl from './ChannelControl';
 import VolumeControl from './VolumeControl';
 
 import { PlayerCSSLink } from './PlayerCSSLink';
-import { RadialMenu } from './RadialMenu'
+import { RadialMenu } from './RadialMenu';
 
 const Display = ({ frame }) => {
-  const [showRadialMenu, setShowRadialMenu] = useState(true)
-  const [commandMenu, setCommandMenu] = useState('')
+  const [showRadialMenu, setShowRadialMenu] = useState(true);
   // Channel control
   const [channel, setChannel] = useState(0);
 
@@ -134,21 +133,24 @@ const Display = ({ frame }) => {
     const neutralX = neutralPosition[0];
     const neutralZ = neutralPosition[2];
 
-    if (palmZ < (neutralZ - distanceThreshold)) {
+    if (palmZ < (neutralZ - distanceThreshold)) { // Channel up
       setCommand('channelUp');
-      setCommandMenu('channelUp');
-    } else if (palmZ > (neutralZ + distanceThreshold)) {
+    } else if (palmZ < (neutralZ - distanceThreshold / 2)) { // Channel up intention
+      setCommand('channelUpIntention');
+    } else if (palmZ > (neutralZ + distanceThreshold)) { // Channel down
       setCommand('channelDown');
-      setCommandMenu('channelDown');
-    } else if (palmX > (neutralX + distanceThreshold)) {
+    } else if (palmZ > (neutralZ + distanceThreshold / 2)) { // Channel down intention
+      setCommand('channelDownIntention');
+    } else if (palmX > (neutralX + distanceThreshold)) { // Volume up
       setCommand('volumeUp');
-      setCommandMenu('volumeUp');
-    } else if (palmX < (neutralX - distanceThreshold)) {
+    } else if (palmX > (neutralX + distanceThreshold / 2)) { // Volume up intention
+      setCommand('volumeUpIntention');
+    } else if (palmX < (neutralX - distanceThreshold)) { // Volume down
       setCommand('volumeDown');
-      setCommandMenu('volumeDown');
+    } else if (palmX < (neutralX - distanceThreshold / 2)) { // Volume down intention
+      setCommand('volumeDownIntention');
     } else {
       setCommand(null);
-      setCommandMenu('menu')
     }
 
     const now = new Date();
@@ -181,7 +183,7 @@ const Display = ({ frame }) => {
             channelDown();
             break;
           default:
-            undefined();
+            return;
         }
         setCommandStartedAt(undefined);
         setCommand(null);
@@ -220,7 +222,7 @@ const Display = ({ frame }) => {
       <>
         Palm Rotation: {Number(palmRotation).toFixed(3)} | Palm Velocity: {Number(palmVelocity).toFixed(3)} | Palm Rotation Velocity: {Number(palmRotationVelocity).toFixed(3)} | Current framerate: {Number(frame ? frame.currentFrameRate : 0).toFixed(0)}
       </>
-      {showRadialMenu && <RadialMenu command={commandMenu} />}
+      {showRadialMenu && <RadialMenu command={command || 'menu'} />}
     </Box>
   );
 };
