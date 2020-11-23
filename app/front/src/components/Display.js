@@ -10,6 +10,15 @@ import VolumeControl from './VolumeControl';
 import { PlayerCSSLink } from './PlayerCSSLink';
 import { RadialMenu } from './RadialMenu';
 
+// Helper function to check previous state
+const usePrevious = (value) => {
+  const ref = useRef();
+  useEffect(() => {
+    ref.current = value;
+  });
+  return ref.current;
+};
+
 const Display = ({ frame }) => {
   const [showRadialMenu, setShowRadialMenu] = useState(true);
   // Channel control
@@ -22,6 +31,23 @@ const Display = ({ frame }) => {
     'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
     'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/VolkswagenGTIReview.mp4'
   ];
+
+  // Hand control
+  const distanceThreshold = 70; /* In milimeters */
+  const defaultDuration = 800; /* In miliseconds */
+  const minimumDuration = 100; /* In miliseconds */
+  const [requiredDuration, setRequiredDuration] = useState(defaultDuration);
+  const previousDuration = usePrevious(requiredDuration);
+
+  const halveRequiredDuration = () => {
+    if (requiredDuration > minimumDuration) {
+      setRequiredDuration(previousDuration / 2);
+    }
+  };
+
+  const resetDuration = () => {
+    setRequiredDuration(defaultDuration);
+  };
 
   const playerRef = useRef();
 
@@ -47,7 +73,6 @@ const Display = ({ frame }) => {
   const [volume, setVolume] = useState(1);
 
   const volumeDown = () => {
-    console.log('Volume from player: ' + playerRef.current.volume);
     if (playerRef.current.volume >= 0.005) {
       playerRef.current.volume -= 0.2;
       setVolume(playerRef.current.volume);
@@ -55,23 +80,10 @@ const Display = ({ frame }) => {
   };
 
   const volumeUp = () => {
-    console.log('Volume from player: ' + playerRef.current.volume);
     if (playerRef.current.volume <= 0.995) {
       playerRef.current.volume += 0.2;
       setVolume(playerRef.current.volume);
     }
-  };
-
-  // Hand control
-  const distanceThreshold = 70; /* In milimeters */
-  const requiredDuration = 750; /* In miliseconds */
-
-  const usePrevious = (value) => {
-    const ref = useRef();
-    useEffect(() => {
-      ref.current = value;
-    });
-    return ref.current;
   };
 
   const [palmPosition, setPalmPosition] = useState([null, null, null]);
@@ -151,6 +163,7 @@ const Display = ({ frame }) => {
       setCommand('volumeDownIntention');
     } else {
       setCommand(null);
+      resetDuration();
     }
 
     const now = new Date();
@@ -172,15 +185,19 @@ const Display = ({ frame }) => {
         switch (command) {
           case 'volumeUp':
             volumeUp();
+            halveRequiredDuration();
             break;
           case 'volumeDown':
             volumeDown();
+            halveRequiredDuration();
             break;
           case 'channelUp':
             channelUp();
+            halveRequiredDuration();
             break;
           case 'channelDown':
             channelDown();
+            halveRequiredDuration();
             break;
           default:
             return;
