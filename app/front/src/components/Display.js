@@ -214,12 +214,18 @@ const Display = ({ frame }) => {
         />
       </>
       <Box display='flex'>
-        <Box mx={4}>
-          <VolumeControl volume={volume * 100 || 0} />
-        </Box>
-        <Box mx={4}>
-          <ChannelControl channel={channel || 0} />
-        </Box>
+        {(command === 'volumeUp' || command === 'volumeDown' ||
+          command === 'volumeUpIntention' || command === 'volumeDownIntention') &&
+          <Box mx={4}>
+            <VolumeControl volume={volume * 100 || 0} />
+          </Box>
+        } 
+        {(command === 'channelUp' || command === 'channelDown' ||
+          command === 'channelUpIntention' || command === 'channelDownIntention') &&
+          <Box mx={4}>
+            <ChannelControl channel={channel || 0} />
+          </Box>
+        }
       </Box>
       <>
         Palm Rotation: {Number(palmRotation).toFixed(3)} | Palm Velocity: {Number(palmVelocity).toFixed(3)} | Palm Rotation Velocity: {Number(palmRotationVelocity).toFixed(3)} | Current framerate: {Number(frame ? frame.currentFrameRate : 0).toFixed(0)}
