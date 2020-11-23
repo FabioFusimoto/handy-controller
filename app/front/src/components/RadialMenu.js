@@ -36,6 +36,7 @@ export function RadialMenu ({ command }) {
         break;
       case 'channelUpIntention':
         setChannelUpClass('intention-selected')
+        setMenuClass('not-selected')
         break;
       case 'channelDownIntention':
         setChannelDownClass('intention-selected')
