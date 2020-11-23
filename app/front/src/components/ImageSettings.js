@@ -21,7 +21,7 @@ const verticalThresholds = [];
   verticalThresholds.push(verticalLowerLimit + (i + 1) * totalVerticalMovement / sliderCount);
 });
 
-const ImageSettings = ({ frame }) => {
+const ImageSettings = ({ frame, neutralPosition, setNeutralPosition }) => {
   // Helper function to refer to previous state
   const usePrevious = (value) => {
     const ref = useRef();
@@ -36,7 +36,6 @@ const ImageSettings = ({ frame }) => {
 
   // Hand controls
   const [palmPosition, setPalmPosition] = useState([null, null, null]);
-  const [neutralPosition, setNeutralPosition] = useState([null, null, null]);
   const [fingersUp, setFingersUp] = useState(null);
   const [selectedSlider, setSelectedSlider] = useState(null);
   const [pinchStrength, setPinchStrength] = useState(null);
