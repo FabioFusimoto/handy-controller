@@ -19,7 +19,7 @@ const usePrevious = (value) => {
   return ref.current;
 };
 
-const Display = ({ frame }) => {
+const Display = ({ frame, neutralPosition, setNeutralPosition }) => {
   const [showRadialMenu, setShowRadialMenu] = useState(false);
   // Channel control
   const [channel, setChannel] = useState(0);
@@ -87,7 +87,6 @@ const Display = ({ frame }) => {
   };
 
   const [palmPosition, setPalmPosition] = useState([null, null, null]);
-  const [neutralPosition, setNeutralPosition] = useState([null, null, null]);
   const [fingersUp, setFingersUp] = useState(null);
   const [palmRotation, setPalmRotation] = useState(null);
   const previousRotation = usePrevious(palmRotation);

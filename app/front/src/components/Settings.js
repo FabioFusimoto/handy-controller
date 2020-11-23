@@ -35,7 +35,7 @@ const verticalThresholds = [];
 
 const buttonIdArray = [...Array(buttonColums * buttonRows).keys()];
 
-const Menu = ({ frame }) => {
+const Menu = ({ frame, neutralPosition, setNeutralPosition }) => {
   // Helper function to refer to previous state
   const usePrevious = (value) => {
     const ref = useRef();
@@ -51,7 +51,6 @@ const Menu = ({ frame }) => {
   // Hand positioning
   const [fingersUp, setFingersUp] = useState(null);
   const [palmPosition, setPalmPosition] = useState([null, null, null]);
-  const [neutralPosition, setNeutralPosition] = useState([null, null, null]);
 
   // Click control
   const [indexSpeed, setIndexSpeed] = useState(null);

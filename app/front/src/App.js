@@ -39,10 +39,35 @@ const App = ({ frame }) => {
     setGesturesEnabled(newToggle);
   };
 
-  const DisplayWithFrame = () => <Display frame={gesturesEnabled ? frame : null} />;
-  const MenuWithFrame = () => <Menu frame={gesturesEnabled ? frame : null} />;
-  const SettingsWithFrame = () => <Settings frame={gesturesEnabled ? frame : null} />;
-  const ImageSettingsWithFrame = () => <ImageSettings frame={gesturesEnabled ? frame : null} />;
+  const [neutralPosition, setNeutralPosition] = useState([null, null, null]);
+
+  const DisplayWithFrame = () =>
+    <Display
+      frame={gesturesEnabled ? frame : null}
+      neutralPosition={neutralPosition}
+      setNeutralPosition={setNeutralPosition}
+    />;
+
+  const MenuWithFrame = () =>
+    <Menu
+      frame={gesturesEnabled ? frame : null}
+      neutralPosition={neutralPosition}
+      setNeutralPosition={setNeutralPosition}
+    />;
+
+  const SettingsWithFrame = () =>
+    <Settings
+      frame={gesturesEnabled ? frame : null}
+      neutralPosition={neutralPosition}
+      setNeutralPosition={setNeutralPosition}
+    />;
+
+  const ImageSettingsWithFrame = () =>
+    <ImageSettings
+      frame={gesturesEnabled ? frame : null}
+      neutralPosition={neutralPosition}
+      setNeutralPosition={setNeutralPosition}
+    />;
 
   return (
     <MuiThemeProvider theme={theme}>
