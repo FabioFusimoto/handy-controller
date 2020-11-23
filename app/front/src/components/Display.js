@@ -227,10 +227,7 @@ const Display = ({ frame }) => {
           </Box>
         }
       </Box>
-      <>
-        Palm Rotation: {Number(palmRotation).toFixed(3)} | Palm Velocity: {Number(palmVelocity).toFixed(3)} | Palm Rotation Velocity: {Number(palmRotationVelocity).toFixed(3)} | Current framerate: {Number(frame ? frame.currentFrameRate : 0).toFixed(0)}
-      </>
-      {showRadialMenu && <RadialMenu command={command || 'menu'} />}
+      {true && <RadialMenu command={command || 'menu'} />}
     </Box>
   );
 };

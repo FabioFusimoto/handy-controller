@@ -6,6 +6,7 @@ import {
   Switch as RouterSwitch
 } from 'react-router-dom';
 import { AnimatedRoute } from 'react-router-transition';
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
 
 import './App.css';
 
@@ -15,6 +16,21 @@ import LeapDebug from './components/LeapDebug';
 import Menu from './components/Menu';
 import Settings from './components/Settings';
 import TopBar from './components/TopBar';
+
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: '#5E2B97',
+      light: '#8F58C8',
+      dark: '#2D0068'
+    },
+    secondary: {
+      main: '#EDE15B',
+      light: '#FFFF8D',
+      dark: '#B8AF27'
+    }
+  }
+})
 
 const App = ({ frame }) => {
   const [gesturesEnabled, setGesturesEnabled] = useState(true);
@@ -29,7 +45,7 @@ const App = ({ frame }) => {
   const ImageSettingsWithFrame = () => <ImageSettings frame={gesturesEnabled ? frame : null} />;
 
   return (
-    <>
+    <MuiThemeProvider theme={theme}>
       <TopBar
         frame={frame}
         gesturesEnabled={gesturesEnabled}
@@ -91,7 +107,7 @@ const App = ({ frame }) => {
           </div>
         </RouterSwitch>
       </Router>
-    </>
+    </MuiThemeProvider>
   );
 };
 
