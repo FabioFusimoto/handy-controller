@@ -106,7 +106,7 @@ const Display = ({ frame }) => {
     if (frame && frame.hands && frame.hands.length > 0) {
       frame.hands.sort((a, b) => (a.type > b.type) ? 0 : 1); /* Right hand has priority over left hand */
       setPalmPosition(frame.hands[0].palmPosition);
-      
+
       const newFingersUp = frame.hands[0].fingers.filter(f => f.extended).length;
       setFingersUp(newFingersUp);
       if (newFingersUp === 0) {
@@ -233,16 +233,14 @@ const Display = ({ frame }) => {
       <Box display='flex'>
         {(command === 'volumeUp' || command === 'volumeDown' ||
           command === 'volumeUpIntention' || command === 'volumeDownIntention') &&
-          <Box mx={4}>
-            <VolumeControl volume={volume * 100 || 0} />
-          </Box>
-        } 
+            <Box mx={4}>
+              <VolumeControl volume={volume * 100 || 0} />
+            </Box>}
         {(command === 'channelUp' || command === 'channelDown' ||
           command === 'channelUpIntention' || command === 'channelDownIntention') &&
-          <Box mx={4}>
-            <ChannelControl channel={channel || 0} />
-          </Box>
-        }
+            <Box mx={4}>
+              <ChannelControl channel={channel || 0} />
+            </Box>}
       </Box>
       {true && <RadialMenu command={command || 'menu'} />}
     </Box>

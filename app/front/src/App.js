@@ -30,7 +30,7 @@ const theme = createMuiTheme({
       dark: '#B8AF27'
     }
   }
-})
+});
 
 const App = ({ frame }) => {
   const [gesturesEnabled, setGesturesEnabled] = useState(true);
