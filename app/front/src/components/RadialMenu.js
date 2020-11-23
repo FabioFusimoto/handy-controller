@@ -1,18 +1,61 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './RadialMenu.css';
 
 export function RadialMenu ({ command }) {
+  const [volumeUpClass, setVolumeUpClass] = useState('not-selected');
+  const [volumeDownClass, setVolumeDownClass] = useState('not-selected');
+  const [channelUpClass, setChannelUpClass] = useState('not-selected');
+  const [channelDownClass, setChannelDownClass] = useState('not-selected');
+  const [menuClass, setMenuClass] = useState('not-selected');
+
+  useEffect(() => {
+    switch (command) {
+      case 'volumeUp':
+        setVolumeUpClass('selected')
+        break;
+      case 'volumeDown':
+        setVolumeDownClass('selected')
+        break;
+      case 'channelUp':
+        setChannelUpClass('selected')
+        break;
+      case 'channelDown':
+        setChannelDownClass('selected')
+        break;
+      case 'volumeUpIntention':
+        setVolumeUpClass('intention-selected')
+        break;
+      case 'volumeDownIntention':
+        setVolumeDownClass('intention-selected')
+        break;
+      case 'channelUpIntention':
+        setChannelUpClass('intention-selected')
+        break;
+      case 'channelDownIntention':
+        setChannelDownClass('intention-selected')
+        break;
+      default:
+        setMenuClass('selected')
+        setVolumeUpClass('not-selected')
+        setVolumeDownClass('not-selected')
+        setChannelUpClass('not-selected')
+        setChannelDownClass('not-selected')
+        return;
+    }
+  }, [command])
+
   return (
     <div className='container'>
       <div className='columns'>
-        <p className={command === 'channelUp' ? 'selected' : 'not-selected'}>CH +</p>
+        <p className={channelUpClass}>CH +</p>
         <div className='volume-inline'>
-          <p className={command === 'volumeDown' ? 'selected' : 'not-selected'}>Vol -</p>
-          <p className={command === 'menu' ? 'selected' : 'not-selected'}>Menu</p>
-          <p className={command === 'volumeUp' ? 'selected' : 'not-selected'}>Vol +</p>
+          <p className={volumeDownClass}>Vol -</p>
+          <p className={menuClass}>Menu</p>
+          <p className={volumeUpClass}>Vol +</p>
         </div>
-        <p className={command === 'channelDown' ? 'selected' : 'not-selected'}>CH -</p>
+        <p className={channelDownClass}>CH -</p>
       </div>
     </div>
   );
 }
+
