@@ -209,22 +209,23 @@ const Display = ({ frame, neutralPosition, setNeutralPosition }) => {
     }
   }, [frame, command, commandStartedAt]);
 
+  // Get the screen size, making the video full screen
+  const screenHeight = window.screen.height - 140
+  const screenWidth = window.screen.width
   return (
     <Box
       alignItems='center'
       display='flex'
       flexDirection='column'
       justifyContent='center'
-      mx='20vh'
-      my='10vh'
     >
       <>
         <PlayerCSSLink />
         <Player
           // autoPlay
           fluid={false}
-          width={720}
-          height={480}
+          width={screenWidth}
+          height={screenHeight}
           src={videos[channel]}
           ref={playerRef}
         />
@@ -241,7 +242,7 @@ const Display = ({ frame, neutralPosition, setNeutralPosition }) => {
               <ChannelControl channel={channel || 0} />
             </Box>}
       </Box>
-      {true && <RadialMenu command={command || 'menu'} />}
+      {command && <RadialMenu command={command || 'menu'} />}
     </Box>
   );
 };
