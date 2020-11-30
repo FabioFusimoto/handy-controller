@@ -16,6 +16,7 @@ import LeapDebug from './components/LeapDebug';
 import Menu from './components/Menu';
 import Settings from './components/Settings';
 import TopBar from './components/TopBar';
+import Tutorial from './components/Tutorial/Tutorial';
 
 const theme = createMuiTheme({
   palette: {
@@ -129,6 +130,9 @@ const App = ({ frame }) => {
                 transform: `translateX(${styles.offset}%)`
               })}
             />
+            <Route>
+              <Tutorial frame={frame} />
+            </Route>
           </div>
         </RouterSwitch>
       </Router>

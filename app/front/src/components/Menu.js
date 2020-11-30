@@ -202,9 +202,9 @@ const Menu = ({ frame, neutralPosition, setNeutralPosition }) => {
   // Click the corresponding button
   useEffect(() => {
     if (fingersUp === 1 &&
-            horizontalButtonSelection !== null &&
-            verticalButtonSelection !== null &&
-            indexSpeed !== null) {
+        horizontalButtonSelection !== null &&
+        verticalButtonSelection !== null &&
+        indexSpeed !== null) {
       const now = new Date();
       const timeSinceLastClick = (lastClickedAt === null)
         ? minimalTimeBetweenClicks
