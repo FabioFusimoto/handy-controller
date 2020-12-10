@@ -16,6 +16,7 @@ import LeapDebug from './components/LeapDebug';
 import Menu from './components/Menu';
 import Settings from './components/Settings';
 import TopBar from './components/TopBar';
+import Tutorial from './components/Tutorial/Tutorial';
 
 const theme = createMuiTheme({
   palette: {
@@ -53,6 +54,7 @@ const App = ({ frame }) => {
       frame={gesturesEnabled ? frame : null}
       neutralPosition={neutralPosition}
       setNeutralPosition={setNeutralPosition}
+      tutorial={false}
     />;
 
   const SettingsWithFrame = () =>
@@ -60,6 +62,7 @@ const App = ({ frame }) => {
       frame={gesturesEnabled ? frame : null}
       neutralPosition={neutralPosition}
       setNeutralPosition={setNeutralPosition}
+      tutorial={false}
     />;
 
   const ImageSettingsWithFrame = () =>
@@ -129,6 +132,12 @@ const App = ({ frame }) => {
                 transform: `translateX(${styles.offset}%)`
               })}
             />
+            <Route
+              exact
+              path='/tutorial'
+            >
+              <Tutorial frame={frame} />
+            </Route>
           </div>
         </RouterSwitch>
       </Router>

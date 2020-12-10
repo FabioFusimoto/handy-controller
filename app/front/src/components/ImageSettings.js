@@ -21,7 +21,7 @@ const verticalThresholds = [];
   verticalThresholds.push(verticalLowerLimit + (i + 1) * totalVerticalMovement / sliderCount);
 });
 
-const ImageSettings = ({ frame, neutralPosition, setNeutralPosition }) => {
+const ImageSettings = ({ frame, neutralPosition, setNeutralPosition, tutorial, tutorialMoveToStep }) => {
   // Helper function to refer to previous state
   const usePrevious = (value) => {
     const ref = useRef();
@@ -161,7 +161,11 @@ const ImageSettings = ({ frame, neutralPosition, setNeutralPosition }) => {
     if (palmVelocity !== null && palmVelocity > velocityThreshold &&
         palmRotationVelocity !== null && palmRotationVelocity > rotationVelocityThreshold &&
         fingersUp !== null && fingersUp > 0) {
-      history.push('/settings');
+      if (tutorial) {
+        tutorialMoveToStep(2);
+      } else {
+        history.push('/settings');
+      }
     }
   }, [fingersUp, history, palmVelocity, palmRotationVelocity]);
 
@@ -192,17 +196,9 @@ const ImageSettings = ({ frame, neutralPosition, setNeutralPosition }) => {
     </Box>;
 
   return (
-    <>
-      <Box m={4}>
-        {namesAndValues.map((x, i) => MenuSlider(i, x[0], x[1]))}
-      </Box>
-      <Box mx={4} my={1}>
-        Pinch Strength: {Number(pinchStrength).toFixed(2)}
-      </Box>
-      <Box mx={4} my={1}>
-        Pinch Started At: {Number(pinchStartedAt).toFixed(2)}
-      </Box>
-    </>
+    <Box m={4}>
+      {namesAndValues.map((x, i) => MenuSlider(i, x[0], x[1]))}
+    </Box>
   );
 };
 

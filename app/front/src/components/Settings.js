@@ -35,7 +35,7 @@ const verticalThresholds = [];
 
 const buttonIdArray = [...Array(buttonColums * buttonRows).keys()];
 
-const Menu = ({ frame, neutralPosition, setNeutralPosition }) => {
+const Menu = ({ frame, neutralPosition, setNeutralPosition, tutorial, tutorialMoveToStep }) => {
   // Helper function to refer to previous state
   const usePrevious = (value) => {
     const ref = useRef();
@@ -229,13 +229,20 @@ const Menu = ({ frame, neutralPosition, setNeutralPosition }) => {
         fingersUp !== null && fingersUp > 0) {
       const now = new Date();
       if (now.getTime() - renderedAt >= 500) {
-        history.push('/menu');
+        if (tutorial) {
+          tutorialMoveToStep(1);
+        } else {
+          history.push('/menu');
+        }
       }
     }
   }, [fingersUp, history, palmVelocity, palmRotationVelocity, renderedAt]);
 
   // Go to ImageSettings after button click
   const goToImageSettings = () => history.push('/image-settings');
+
+  // Advance tutorial
+  const advanceTutorial = () => tutorialMoveToStep(3);
 
   // Button Click => log id to console
   const handleButtonClick = (id) => {
@@ -329,7 +336,7 @@ const Menu = ({ frame, neutralPosition, setNeutralPosition }) => {
                 style={{ color: 'green' }}
                 id='button_4'
                 fullWidth
-                onClick={goToImageSettings}
+                onClick={tutorial ? advanceTutorial : goToImageSettings}
                 ref={(button) => { buttonRefs.current[4] = button; }}
                 variant='outlined'
               >
@@ -361,18 +368,6 @@ const Menu = ({ frame, neutralPosition, setNeutralPosition }) => {
 
         </Grid>
       </Box>
-      <div>
-        Palm position: {palmPosition} | Neutral position: {neutralPosition}
-      </div>
-      <div>
-        Horizontal Thresholds: {horizontalThresholds} | Vertical Thresholds: {verticalThresholds}
-      </div>
-      <div>
-        Horizontal Displacement: {Number(palmPosition[0] - neutralPosition[0]).toFixed(1)} | Vertical Displacement: {Number(palmPosition[2] - neutralPosition[2]).toFixed(1)}
-      </div>
-      <div>
-        Horizontal Button Selection: {horizontalButtonSelection} | Vertical Button Selection: {verticalButtonSelection} | ID: {verticalButtonSelection * buttonColums + horizontalButtonSelection}
-      </div>
     </Box>
   );
 };
