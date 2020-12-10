@@ -222,7 +222,7 @@ const Display = ({ frame, neutralPosition, setNeutralPosition }) => {
       <>
         <PlayerCSSLink />
         <Player
-          // autoPlay
+          autoPlay
           fluid={false}
           width={screenWidth}
           height={screenHeight}
