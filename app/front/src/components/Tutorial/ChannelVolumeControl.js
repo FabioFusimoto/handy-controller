@@ -33,7 +33,7 @@ const ChannelVolumeControl = ({ fingersUp, neutralPosition, onFinish, palmPositi
       setProgress(1);
     } else if (previousProgress === 1 && fingersUp > 0) {
       setProgress(2);
-      onFinish();
+      onFinish(1);
     }
   }, [fingersUp, fingersUpWasZero, onFinish, previousProgress]);
 
@@ -171,7 +171,6 @@ const ChannelVolumeControl = ({ fingersUp, neutralPosition, onFinish, palmPositi
       <Box my={4}>
         <Typography
           align='center'
-          color='secondary'
           justifyContent='center'
           variant='h4'
         >
@@ -196,7 +195,6 @@ const ChannelVolumeControl = ({ fingersUp, neutralPosition, onFinish, palmPositi
       </Box>
       <Typography
         align='center'
-        color='secondary'
         justifyContent='center'
         variant='h4'
       >

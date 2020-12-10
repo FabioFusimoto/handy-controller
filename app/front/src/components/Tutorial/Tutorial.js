@@ -1,6 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 import ChannelVolumeControl from './ChannelVolumeControl';
+import MenuNavigation from './MenuNavigation';
+import MoreMenuNavigation from './MoreMenuNavigation';
+import SliderControl from './SliderControl';
 
 const usePrevious = (value) => {
   const ref = useRef();
@@ -13,13 +16,12 @@ const usePrevious = (value) => {
 const Tutorial = ({ frame }) => {
   // Progress
   const [stepsFinished, setStepsFinished] = useState(0);
-  const incrementStepsFinished = () => setStepsFinished(stepsFinished + 1);
+  const incrementStepsFinished = (i) => setStepsFinished(i);
 
   // Data read from frame
   const [palmPosition, setPalmPosition] = useState(null);
   const [fingersUp, setFingersUp] = useState(null);
   const [neutralPosition, setNeutralPosition] = useState(null);
-  const [indexSpeed, setIndexSpeed] = useState(null);
   const [palmVelocity, setPalmVelocity] = useState(null);
   const velocityThreshold = 400; // In milimeters per second
   const [palmRotation, setPalmRotation] = useState(null);
@@ -48,10 +50,6 @@ const Tutorial = ({ frame }) => {
       // Finger up count
       setFingersUp(newFingersUp);
 
-      // Index finger speed towards the LEAP Motion
-      const indexFingertipSpeed = -frame.hands[0].indexFinger.tipVelocity[1]; // +y axis is perpendicular to LEAP, pointing out of the surface
-      setIndexSpeed(indexFingertipSpeed);
-
       // Linear palm velocity
       setPalmVelocity(frame.hands[0].palmVelocity[0]);
 
@@ -75,9 +73,6 @@ const Tutorial = ({ frame }) => {
       // Fingers up
       setFingersUp(null);
 
-      // Index finger speed
-      setIndexSpeed(null);
-
       // Linear palm velocity
       setPalmVelocity(null);
 
@@ -94,7 +89,7 @@ const Tutorial = ({ frame }) => {
         palmRotationVelocity !== null && palmRotationVelocity < (-rotationVelocityThreshold) &&
         fingersUp !== null && fingersUp > 0 &&
         stepsFinished > currentStep) {
-      setCurrentStep(stepsFinished);
+      setCurrentStep(1);
     }
   }, [currentStep, fingersUp, palmVelocity, palmRotationVelocity, stepsFinished]);
 
@@ -107,7 +102,27 @@ const Tutorial = ({ frame }) => {
       palmPosition={palmPosition}
       usePrevious={usePrevious}
     />,
-    <div key={1}> HELLO </div>
+    <MenuNavigation
+      key={1}
+      frame={frame}
+      neutralPosition={neutralPosition}
+      setCurrentStep={setCurrentStep}
+      setNeutralPosition={setNeutralPosition}
+    />,
+    <MoreMenuNavigation
+      key={2}
+      frame={frame}
+      neutralPosition={neutralPosition}
+      setCurrentStep={setCurrentStep}
+      setNeutralPosition={setNeutralPosition}
+    />,
+    <SliderControl
+      key={3}
+      frame={frame}
+      neutralPosition={neutralPosition}
+      setCurrentStep={setCurrentStep}
+      setNeutralPosition={setNeutralPosition}
+    />
   ];
 
   return (stepComponentsToRender[currentStep]);

@@ -54,6 +54,7 @@ const App = ({ frame }) => {
       frame={gesturesEnabled ? frame : null}
       neutralPosition={neutralPosition}
       setNeutralPosition={setNeutralPosition}
+      tutorial={false}
     />;
 
   const SettingsWithFrame = () =>
@@ -61,6 +62,7 @@ const App = ({ frame }) => {
       frame={gesturesEnabled ? frame : null}
       neutralPosition={neutralPosition}
       setNeutralPosition={setNeutralPosition}
+      tutorial={false}
     />;
 
   const ImageSettingsWithFrame = () =>
@@ -130,7 +132,10 @@ const App = ({ frame }) => {
                 transform: `translateX(${styles.offset}%)`
               })}
             />
-            <Route>
+            <Route
+              exact
+              path='/tutorial'
+            >
               <Tutorial frame={frame} />
             </Route>
           </div>
