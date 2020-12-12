@@ -20,7 +20,6 @@ const usePrevious = (value) => {
 };
 
 const Display = ({ frame, neutralPosition, setNeutralPosition }) => {
-  const [showRadialMenu, setShowRadialMenu] = useState(false);
   // Channel control
   const [channel, setChannel] = useState(0);
 
@@ -118,14 +117,12 @@ const Display = ({ frame, neutralPosition, setNeutralPosition }) => {
       setPalmRotation(newRotation);
       setPalmRotationVelocity(newRotationSpeed);
       setPalmVelocity(frame.hands[0].palmVelocity[0]);
-      setShowRadialMenu(true);
     } else {
       setPalmPosition([null, null, null]);
       setPalmRotation(null);
       setPalmRotationVelocity(null);
       setPalmVelocity(null);
       setCommand(null);
-      setShowRadialMenu(false);
     }
   }, [frame, previousRotation]);
 
@@ -210,8 +207,8 @@ const Display = ({ frame, neutralPosition, setNeutralPosition }) => {
   }, [frame, command, commandStartedAt]);
 
   // Get the screen size, making the video full screen
-  const screenHeight = window.screen.height - 140
-  const screenWidth = window.screen.width
+  const screenHeight = window.screen.height - 140;
+  const screenWidth = window.screen.width;
   return (
     <Box
       alignItems='center'
