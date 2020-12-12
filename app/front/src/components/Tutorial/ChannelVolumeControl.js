@@ -7,7 +7,7 @@ import ChannelControl from '../ChannelControl';
 import VolumeControl from '../VolumeControl';
 
 import { RadialMenu } from '../RadialMenu';
-import './RadialMenu.css';
+import './Tutorial.css';
 
 const ChannelVolumeControl = ({ fingersUp, neutralPosition, onFinish, palmPosition, usePrevious }) => {
   // Calibration constants
