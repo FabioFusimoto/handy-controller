@@ -231,15 +231,15 @@ const Display = ({ frame, neutralPosition, setNeutralPosition }) => {
         {(command === 'volumeUp' || command === 'volumeDown' ||
           command === 'volumeUpIntention' || command === 'volumeDownIntention') &&
             <Box mx={4}>
-              <VolumeControl volume={volume * 100 || 0} />
+              {frame && <VolumeControl volume={volume * 100 || 0} />}
             </Box>}
         {(command === 'channelUp' || command === 'channelDown' ||
           command === 'channelUpIntention' || command === 'channelDownIntention') &&
             <Box mx={4}>
-              <ChannelControl channel={channel || 0} />
+              {frame && <ChannelControl channel={channel || 0} />}
             </Box>}
       </Box>
-      {command && <RadialMenu command={command || 'menu'} />}
+      {frame && command && <RadialMenu command={command || 'menu'} />}
     </Box>
   );
 };
