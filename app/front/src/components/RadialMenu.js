@@ -11,46 +11,45 @@ export function RadialMenu ({ command }) {
   useEffect(() => {
     switch (command) {
       case 'volumeUp':
-        setVolumeUpClass('selected')
-        setMenuClass('not-selected')
+        setVolumeUpClass('selected');
+        setMenuClass('not-selected');
         break;
       case 'volumeDown':
-        setVolumeDownClass('selected')
-        setMenuClass('not-selected')
+        setVolumeDownClass('selected');
+        setMenuClass('not-selected');
         break;
       case 'channelUp':
-        setChannelUpClass('selected')
-        setMenuClass('not-selected')
+        setChannelUpClass('selected');
+        setMenuClass('not-selected');
         break;
       case 'channelDown':
-        setChannelDownClass('selected')
-        setMenuClass('not-selected')
+        setChannelDownClass('selected');
+        setMenuClass('not-selected');
         break;
       case 'volumeUpIntention':
-        setVolumeUpClass('intention-selected')
-        setMenuClass('not-selected')
+        setVolumeUpClass('intention-selected');
+        setMenuClass('not-selected');
         break;
       case 'volumeDownIntention':
-        setVolumeDownClass('intention-selected')
-        setMenuClass('not-selected')
+        setVolumeDownClass('intention-selected');
+        setMenuClass('not-selected');
         break;
       case 'channelUpIntention':
-        setChannelUpClass('intention-selected')
-        setMenuClass('not-selected')
+        setChannelUpClass('intention-selected');
+        setMenuClass('not-selected');
         break;
       case 'channelDownIntention':
-        setChannelDownClass('intention-selected')
-        setMenuClass('not-selected')
+        setChannelDownClass('intention-selected');
+        setMenuClass('not-selected');
         break;
       default:
-        setMenuClass('selected')
-        setVolumeUpClass('not-selected')
-        setVolumeDownClass('not-selected')
-        setChannelUpClass('not-selected')
-        setChannelDownClass('not-selected')
-        return;
+        setMenuClass('selected');
+        setVolumeUpClass('not-selected');
+        setVolumeDownClass('not-selected');
+        setChannelUpClass('not-selected');
+        setChannelDownClass('not-selected');
     }
-  }, [command])
+  }, [command]);
 
   return (
     <div className='container'>
@@ -66,4 +65,3 @@ export function RadialMenu ({ command }) {
     </div>
   );
 }
-

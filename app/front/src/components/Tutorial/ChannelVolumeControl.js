@@ -7,6 +7,7 @@ import ChannelControl from '../ChannelControl';
 import VolumeControl from '../VolumeControl';
 
 import { RadialMenu } from '../RadialMenu';
+import './Tutorial.css';
 
 const ChannelVolumeControl = ({ fingersUp, neutralPosition, onFinish, palmPosition, usePrevious }) => {
   // Calibration constants
@@ -19,7 +20,7 @@ const ChannelVolumeControl = ({ fingersUp, neutralPosition, onFinish, palmPositi
   const previousCommand = usePrevious(command);
 
   const [volume, setVolume] = useState(0.5);
-  const [channel, setChannel] = useState(0);
+  const [channel, setChannel] = useState(10);
 
   // Progress state variables
   // progress --> 0: resetNeutralPosition; 1: issueCommands
@@ -155,19 +156,18 @@ const ChannelVolumeControl = ({ fingersUp, neutralPosition, onFinish, palmPositi
       flexDirection='column'
     >
       <>
-        <Box
-          display='flex'
-          flexDirection='row'
-        >
-          <Box mx={4}>
-            <VolumeControl volume={volume * 100 || 0} />
-          </Box>
-          <Box mx={4}>
-            <ChannelControl channel={channel || 0} />
-          </Box>
-        </Box>
+        {(command === 'volumeUp' || command === 'volumeDown' ||
+          command === 'volumeUpIntention' || command === 'volumeDownIntention') &&
+            <Box mx={4}>
+              <VolumeControl volume={volume * 100 || 0} />
+            </Box>}
+        {(command === 'channelUp' || command === 'channelDown' ||
+          command === 'channelUpIntention' || command === 'channelDownIntention') &&
+            <Box mx={4}>
+              <ChannelControl channel={channel || 0} />
+            </Box>}
       </>
-      <RadialMenu command={command || 'menu'} />
+      {command && <RadialMenu command={command} />}
       <Box my={4}>
         <Typography
           align='center'

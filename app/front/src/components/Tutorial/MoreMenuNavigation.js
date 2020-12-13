@@ -18,7 +18,7 @@ const MoreMenuNavigation = ({ frame, neutralPosition, setCurrentStep, setNeutral
         justifyContent='center'
         variant='h4'
       >
-        Para voltar ao Menu anterior, realize um movimento de swipe da direita para a esquerda.
+        Para voltar ao Menu anterior, realize um movimento de swipe da esquerda para a direita.
         Para continuar o tutorial, clique no item 'Image' do menu.
       </Typography>
       <Settings

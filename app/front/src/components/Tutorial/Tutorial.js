@@ -5,6 +5,8 @@ import MenuNavigation from './MenuNavigation';
 import MoreMenuNavigation from './MoreMenuNavigation';
 import SliderControl from './SliderControl';
 
+import './Tutorial.css';
+
 const usePrevious = (value) => {
   const ref = useRef();
   useEffect(() => {
